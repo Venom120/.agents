@@ -160,12 +160,13 @@ def scan_md_dir(dirs: dict, harnesses: list[str], extra: list[tuple[str, Path]],
     for harness, base in [(h, dirs[h]) for h in harnesses if h in dirs] + extra:
         if not base.exists():
             continue
+        whole = is_link(base) and harness != "agents"
         for p in sorted(base.rglob("*")):
             if p.is_file() and p.suffix in suffixes:
                 fm = frontmatter(p)
                 items.append({
                     "name": p.stem.replace(".agent", ""), "harness": harness, "path": str(p),
-                    "kind": "junction/link" if is_link(p) else "real",
+                    "kind": "folder-junction" if whole else ("junction/link" if is_link(p) else "real"),
                     "description": fm.get("description", ""), "bytes": p.stat().st_size,
                 })
     return items
@@ -314,6 +315,8 @@ def main() -> int:
     if "commands" in want_cats:
         ch = [h for h in COMMAND_DIRS] if t in ("all", *cats) else ([t] if t in COMMAND_DIRS else [])
         inv["commands"] = scan_md_dir(COMMAND_DIRS, ch, extra_c)
+        # real command files in a harness folder that is not linked to ~/.agents/commands (project scope is intentional)
+        inv["loose_commands"] = [c["path"] for c in inv["commands"] if c["kind"] == "real" and c["harness"] not in ("agents", "project")]
     if "agents" in want_cats:
         ah = [h for h in AGENT_DIRS] if t in ("all", *cats) else ([t] if t in AGENT_DIRS else [])
         inv["agents"] = scan_md_dir(AGENT_DIRS, ah, extra_a, suffixes=(".md",))
@@ -325,7 +328,7 @@ def main() -> int:
         inv["hooks"] = hooks(project)
 
     summary = {k: len(v) for k, v in inv.items() if isinstance(v, list)}
-    print(json.dumps({"summary": summary, "broken_links": inv.get("broken_links", []),
+    print(json.dumps({"summary": summary, "broken_links": inv.get("broken_links", []), "loose_commands": inv.get("loose_commands", []),
                       "duplicates": len(inv.get("duplicates", []))}, indent=1))
     if a.out:
         Path(a.out).write_text(json.dumps(inv, indent=1), encoding="utf-8")
@@ -339,7 +342,7 @@ def main() -> int:
     REP.mkdir(parents=True, exist_ok=True)
     latest = MAN / "inventory.json"
     old = load_json(latest, {})
-    for name, keys in (("skills", ["skills", "duplicates", "broken_links"]), ("commands", ["commands", "agents"]),
+    for name, keys in (("skills", ["skills", "duplicates", "broken_links"]), ("commands", ["commands", "loose_commands", "agents"]),
                        ("integrations", ["harnesses", "plugins", "mcp", "hooks"])):
         (MAN / f"{name}.json").write_text(json.dumps({k: inv.get(k) for k in ["generated", *keys]}, indent=1), encoding="utf-8")
     latest.write_text(json.dumps(inv, indent=1), encoding="utf-8")

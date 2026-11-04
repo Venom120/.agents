@@ -30,7 +30,8 @@ Present batches of at most 8 items. Per significant item give: name + path; what
 Clearly identical duplicates may be grouped but must list every original path. Ask with AskUserQuestion after each batch. Large plugins (e.g. `ecc`) are ONE entry with counts unless the user asks to drill down. Record every answer in `manifests/decisions.json` (`{item, action, date}`).
 
 ## Execute only approved decisions
-- **Move/centralize a skill:** `mv <old> ~/.agents/skills/<name>` then `bash ~/.agents/scripts/link-skill.sh <name> [target-skills-dir]` (idempotent junction). Windows junctions need no admin; file symlinks do, so commands are copied by script, not linked.
+- **Move/centralize a skill:** `mv <old> ~/.agents/skills/<name>` then `bash ~/.agents/scripts/link-skill.sh <name> [target-skills-dir]` (idempotent junction). Windows junctions need no admin; file symlinks do, so commands are shared by linking the whole folder.
+- **Commands:** real files live in `~/.agents/commands`; `bash ~/.agents/scripts/link-commands.sh [target]` links a harness commands folder to it (Claude `~/.claude/commands`, OpenCode `~/.config/opencode/commands`). The audit lists `loose_commands` (real files in a harness folder that is not linked): move each into `~/.agents/commands` after asking, then run the link script. Project-scope commands (`<repo>/.claude/commands`) stay in the repo.
 - **Install third-party skills:** `npx skills add <owner/repo> -g -a claude-code -y -s <name...>`; the CLI COPIES into `~/.claude/skills`, so move each result into `~/.agents/skills` and relink. Never pass `-a '*'` or the old agent list (it recreates deleted harness folders).
 - **Remove a skill:** delete it; no backup is needed when the user says remove (their rule). Remove its junctions too (in Git Bash use `cmd //c "rmdir $(cygpath -w <junction>)"`; hand-written `C:\...` paths in double quotes fail; rmdir never touches the source).
 - **Edit configs** (settings.json, opencode.jsonc, config.toml, hooks): back up the file to `~/.agents/backups/<ts>/` first, edit minimally, re-validate (JSON/TOML parse).
@@ -48,7 +49,7 @@ Never recommend removing a GLOBAL skill just because the current project does no
 | OpenCode | `~/.config/opencode/skills`, `~/.claude/skills`, `~/.agents/skills` | already sees `~/.agents` |
 | Codex | `~/.agents/skills` | disable per skill with `[[skills.config]] path=... enabled=false` in `~/.codex/config.toml` |
 | Antigravity | `~/.gemini/config/skills` (IDE legacy `~/.gemini/antigravity/skills`) | whole-folder junction to `~/.agents/skills` |
-Commands/agents have different native formats per harness; keep each harness's own adapter, never symlink across formats.
+Agents have different native formats per harness; keep each harness's own adapter, never symlink across formats. Commands share one body format (`description` frontmatter + `$ARGUMENTS`), so one folder serves Claude and OpenCode; extra frontmatter keys are ignored.
 
 ## Verify and report
 1. Re-run `inventory.py` (full) and confirm `broken_links` is empty and no new duplicates.
