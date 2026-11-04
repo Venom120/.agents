@@ -1,10 +1,8 @@
 # AGENTS.md — plug-and-play agent playbook
 
-> **How to use.** 1) Clone/copy this repo to `~/.agents`. 2) Copy this file into your project root as `AGENTS.md` (Codex, OpenCode,
-> Antigravity) or `CLAUDE.md` (Claude Code) — same content. 3) Fill **§P** (or run `/init-playbook`, which does it and adds a tooling
-> block). 4) Delete sections you do not need; keep your project copy near 150 lines and link long docs instead of pasting them.
-> The rules below were distilled from a large production codebase (layered FastAPI + React app). Stack-specific names are examples:
-> swap in your equivalents, keep the discipline.
+The rules below were distilled from a large production codebase (layered
+FastAPI + React app). Stack-specific names are examples: swap in your
+equivalents, keep the discipline.
 
 ## P. Project profile (fill in)
 - **Stack / layout:** `<languages, frameworks, folders, ports>`
