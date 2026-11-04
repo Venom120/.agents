@@ -1,0 +1,8 @@
+# Machine-local / large / regenerated
+backups/
+manifests/*.json
+reports/*.tmp
+*.log
+node_modules/
+skills/*/node_modules/
+skills/*/.git/

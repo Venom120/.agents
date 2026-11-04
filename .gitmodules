@@ -1,0 +1,3 @@
+[submodule "skills/img2threejs"]
+	path = skills/img2threejs
+	url = https://github.com/img2threejs/img2threejs.git
