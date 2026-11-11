@@ -1,3 +1,6 @@
 [submodule "skills/img2threejs"]
 	path = skills/img2threejs
 	url = https://github.com/img2threejs/img2threejs.git
+[submodule "skills/claude-animated-shorts"]
+	path = skills/claude-animated-shorts
+	url = https://github.com/mromidev/claude-animated-shorts.git

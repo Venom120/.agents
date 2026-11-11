@@ -25,6 +25,7 @@ Continue to the next phase without waiting for approval unless blocked by step 2
 ## 4. Tests (after all phases)
 - Run only the tests added or touched by this work (scoped), not the full suite.
 - If any fail: fix, then re-run ONLY the tests that failed/were fixed. Repeat until green. Do not re-run the full suite.
+- The full suite and the validator/lifecycle check are HEAVY: run them ONLY when the user explicitly approves in this conversation. Never start them on your own, never re-run one that already passed for this batch, and never kill one mid-run (it leaks rows). Write the new tests and validator calls, run only the scoped tests, and ask before the gate; mention in the final report that the gate was not run.
 - Never chain a test suite and a validator/lifecycle check in ONE command (no `;`, `&&`, or pipes between them): run the tests alone, read the result, fix every failure, and only then start the validator as its own separate command, so a red suite never wastes a validator run.
 - If a failure reveals a plan/design problem rather than a bug, ask the user.
 
