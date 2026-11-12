@@ -1,6 +1,9 @@
 # Machine-local / large / regenerated
 backups/
 manifests/*.json
+omniroute-setup/omniroute_*.csv
+omniroute-setup/omniroute_*.json
+omniroute-setup/__pycache__/
 reports/*.tmp
 *.log
 node_modules/

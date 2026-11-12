@@ -8,12 +8,12 @@ OmniRoute CSV exports.
 
 ## Required workflow
 
-1. Locate the My-Agents repository by finding:
-   - `setup/omniroute/INSTRUCTIONS.md`
-   - `setup/omniroute/omniroute_free_combos.py`
-   - `setup/omniroute/omniroute_models.csv`
-   - `setup/omniroute/omniroute_providers.csv`
-2. Read `setup/omniroute/README.md`, `INSTRUCTIONS.md`, the complete combo
+1. Locate the `~/.agents` checkout and find:
+   - `omniroute-setup/INSTRUCTIONS.md`
+   - `omniroute-setup/omniroute_free_combos.py`
+   - `omniroute-setup/omniroute_models.csv`
+   - `omniroute-setup/omniroute_providers.csv`
+2. Read `omniroute-setup/README.md`, `INSTRUCTIONS.md`, the complete combo
    builder, and both CSV files before editing.
 3. Follow `INSTRUCTIONS.md` exactly:
    - `working=true` is eligible.
@@ -25,7 +25,7 @@ OmniRoute CSV exports.
    - Require confirmed vision support for `free-vision`.
    - Keep `free-coding-fast` as `round-robin`.
 4. Rebuild only the `COMBOS` variable in
-   `setup/omniroute/omniroute_free_combos.py`. Do not change combo names,
+   `omniroute-setup/omniroute_free_combos.py`. Do not change combo names,
    worker mappings, HTTP behavior, or unrelated configuration.
 5. Put working models before quota/rate-limited fallbacks and avoid duplicate
    aliases within a combo.
@@ -39,6 +39,6 @@ OmniRoute CSV exports.
    required OmniRoute environment is available. Do not claim the remote
    combos were applied unless the builder was actually run successfully.
 
-If the CSVs are missing, health fields are ambiguous, or the My-Agents
-repository cannot be located, stop and report the exact blocker instead of
-guessing.
+If the CSVs are missing, health fields are ambiguous, or the `~/.agents`
+checkout cannot be located, stop and report the exact blocker instead of
+guessing. Never commit generated exports or credentials.
