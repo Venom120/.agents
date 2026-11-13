@@ -9,6 +9,34 @@ Place the repository at `~/.agents` so supported harnesses can discover the
 shared skills. Use the linking scripts and the harness-specific instructions
 under [AGENTS.md](AGENTS.md) when enabling skills.
 
+### Link a manually added skill on Windows
+
+After adding a skill directory under `C:\Users\<username>\.agents\skills`,
+replace `your-skill-name` below with that directory name. These commands create
+a directory junction, so Claude reads the canonical skill files from `.agents`.
+
+PowerShell:
+
+```powershell
+$skill = "your-skill-name"
+$source = Join-Path $HOME ".agents\skills\$skill"
+$target = Join-Path $HOME ".claude\skills\$skill"
+New-Item -ItemType Directory -Force -Path (Split-Path $target) | Out-Null
+New-Item -ItemType Junction -Path $target -Target $source
+```
+
+Command Prompt:
+
+```cmd
+set "SKILL=your-skill-name"
+if not exist "%USERPROFILE%\.claude\skills" mkdir "%USERPROFILE%\.claude\skills"
+mklink /J "%USERPROFILE%\.claude\skills\%SKILL%" "%USERPROFILE%\.agents\skills\%SKILL%"
+```
+
+The target link must not already exist. To remove only the link while keeping
+the skill source, use `rmdir "%USERPROFILE%\.claude\skills\%SKILL%"` in
+Command Prompt or `Remove-Item $target` in PowerShell.
+
 Generated inventory manifests are machine-local and intentionally ignored by
 Git. Cleanup reports and other local backups are also not part of the public
 repository.

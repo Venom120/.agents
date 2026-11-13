@@ -7,3 +7,6 @@
 [submodule "skills/andrej-karpathy-skills"]
 	path = skills/andrej-karpathy-skills
 	url = https://github.com/multica-ai/andrej-karpathy-skills.git
+[submodule "skills/be-ambitious"]
+	path = skills/be-ambitious
+	url = https://github.com/robonuggets/be-ambitious.git
