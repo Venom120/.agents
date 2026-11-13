@@ -1,0 +1,3 @@
+interface:
+  display_name: "Referral DM"
+  short_description: "Referral requests that get replies"

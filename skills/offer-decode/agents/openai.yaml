@@ -1,0 +1,3 @@
+interface:
+  display_name: "Offer Decode"
+  short_description: "CTC breakdown, in-hand estimate and red flags"

@@ -4,3 +4,6 @@
 [submodule "skills/claude-animated-shorts"]
 	path = skills/claude-animated-shorts
 	url = https://github.com/mromidev/claude-animated-shorts.git
+[submodule "skills/andrej-karpathy-skills"]
+	path = skills/andrej-karpathy-skills
+	url = https://github.com/multica-ai/andrej-karpathy-skills.git

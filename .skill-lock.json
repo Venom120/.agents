@@ -582,6 +582,186 @@
       "skillFolderHash": "3b5117d349200e33f9c3399344681620079dcc18",
       "installedAt": "2026-11-03T18:42:18.342Z",
       "updatedAt": "2026-11-03T18:42:18.342Z"
+    },
+    "company-intel": {
+      "source": "nishant-Tiwari24/cracked",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nishant-Tiwari24/cracked.git",
+      "skillPath": "skills/core/company-intel/SKILL.md",
+      "skillFolderHash": "4a0c8f1fa6a09c20d8aa5fa79e00319b57e92c0c",
+      "pluginName": "cracked",
+      "installedAt": "2026-11-12T18:37:58.537Z",
+      "updatedAt": "2026-11-12T18:37:58.537Z"
+    },
+    "core-viva": {
+      "source": "nishant-Tiwari24/cracked",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nishant-Tiwari24/cracked.git",
+      "skillPath": "skills/interview/core-viva/SKILL.md",
+      "skillFolderHash": "c5a07ebb8482bf87ea86677d76fa429af6e9049b",
+      "pluginName": "cracked",
+      "installedAt": "2026-11-12T18:37:58.540Z",
+      "updatedAt": "2026-11-12T18:37:58.540Z"
+    },
+    "cracked-profile": {
+      "source": "nishant-Tiwari24/cracked",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nishant-Tiwari24/cracked.git",
+      "skillPath": "skills/core/cracked-profile/SKILL.md",
+      "skillFolderHash": "ffe22a69beb4b3d59cd301282d111b9740236de7",
+      "pluginName": "cracked",
+      "installedAt": "2026-11-12T18:37:58.543Z",
+      "updatedAt": "2026-11-12T18:37:58.543Z"
+    },
+    "defend-my-project": {
+      "source": "nishant-Tiwari24/cracked",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nishant-Tiwari24/cracked.git",
+      "skillPath": "skills/interview/defend-my-project/SKILL.md",
+      "skillFolderHash": "7634995ac79ad32cd0b5ba26ec62c81de4d74be7",
+      "pluginName": "cracked",
+      "installedAt": "2026-11-12T18:37:58.545Z",
+      "updatedAt": "2026-11-12T18:37:58.545Z"
+    },
+    "github-glowup": {
+      "source": "nishant-Tiwari24/cracked",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nishant-Tiwari24/cracked.git",
+      "skillPath": "skills/profile/github-glowup/SKILL.md",
+      "skillFolderHash": "a038f75038afe17f49a0b70f3f9ad84e43d7b499",
+      "pluginName": "cracked",
+      "installedAt": "2026-11-12T18:37:58.547Z",
+      "updatedAt": "2026-11-12T18:37:58.547Z"
+    },
+    "hr-round": {
+      "source": "nishant-Tiwari24/cracked",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nishant-Tiwari24/cracked.git",
+      "skillPath": "skills/interview/hr-round/SKILL.md",
+      "skillFolderHash": "ad6f3a72e5a6cbbb70c1c7eb712b4ad3f89af084",
+      "pluginName": "cracked",
+      "installedAt": "2026-11-12T18:37:58.548Z",
+      "updatedAt": "2026-11-12T18:37:58.548Z"
+    },
+    "jd-match": {
+      "source": "nishant-Tiwari24/cracked",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nishant-Tiwari24/cracked.git",
+      "skillPath": "skills/profile/jd-match/SKILL.md",
+      "skillFolderHash": "be09610355f23284b9183d024d65245e54e5e331",
+      "pluginName": "cracked",
+      "installedAt": "2026-11-12T18:37:58.550Z",
+      "updatedAt": "2026-11-12T18:37:58.550Z"
+    },
+    "make-it-hireable": {
+      "source": "nishant-Tiwari24/cracked",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nishant-Tiwari24/cracked.git",
+      "skillPath": "skills/profile/make-it-hireable/SKILL.md",
+      "skillFolderHash": "4d8fc6623833de15d82fd8187405b385794d6ebe",
+      "pluginName": "cracked",
+      "installedAt": "2026-11-12T18:37:58.552Z",
+      "updatedAt": "2026-11-12T18:37:58.552Z"
+    },
+    "oa-sim": {
+      "source": "nishant-Tiwari24/cracked",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nishant-Tiwari24/cracked.git",
+      "skillPath": "skills/interview/oa-sim/SKILL.md",
+      "skillFolderHash": "dad770e17fdd4370a1ed422292fe0d3b5f399b9a",
+      "pluginName": "cracked",
+      "installedAt": "2026-11-12T18:37:58.554Z",
+      "updatedAt": "2026-11-12T18:37:58.554Z"
+    },
+    "offer-decode": {
+      "source": "nishant-Tiwari24/cracked",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nishant-Tiwari24/cracked.git",
+      "skillPath": "skills/strategy/offer-decode/SKILL.md",
+      "skillFolderHash": "8e562f76b73b6adba11f200f682c5193c59d9cfc",
+      "pluginName": "cracked",
+      "installedAt": "2026-11-12T18:37:58.556Z",
+      "updatedAt": "2026-11-12T18:37:58.556Z"
+    },
+    "pattern-coach": {
+      "source": "nishant-Tiwari24/cracked",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nishant-Tiwari24/cracked.git",
+      "skillPath": "skills/interview/pattern-coach/SKILL.md",
+      "skillFolderHash": "8edf50debb0a2470e2dfe7c247bafda3d5688cda",
+      "pluginName": "cracked",
+      "installedAt": "2026-11-12T18:37:58.559Z",
+      "updatedAt": "2026-11-12T18:37:58.559Z"
+    },
+    "prep-plan": {
+      "source": "nishant-Tiwari24/cracked",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nishant-Tiwari24/cracked.git",
+      "skillPath": "skills/strategy/prep-plan/SKILL.md",
+      "skillFolderHash": "199bbde09fb9461d55db9aa9687983becaa20adf",
+      "pluginName": "cracked",
+      "installedAt": "2026-11-12T18:37:58.561Z",
+      "updatedAt": "2026-11-12T18:37:58.561Z"
+    },
+    "referral-dm": {
+      "source": "nishant-Tiwari24/cracked",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nishant-Tiwari24/cracked.git",
+      "skillPath": "skills/profile/referral-dm/SKILL.md",
+      "skillFolderHash": "6c51e9c419f858240ddbfbed3d9acf2ebfb5c5b4",
+      "pluginName": "cracked",
+      "installedAt": "2026-11-12T18:37:58.563Z",
+      "updatedAt": "2026-11-12T18:37:58.563Z"
+    },
+    "rejection-review": {
+      "source": "nishant-Tiwari24/cracked",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nishant-Tiwari24/cracked.git",
+      "skillPath": "skills/strategy/rejection-review/SKILL.md",
+      "skillFolderHash": "fcc499b6949b6d6bff84ab22135d43837b7d1133",
+      "pluginName": "cracked",
+      "installedAt": "2026-11-12T18:37:58.565Z",
+      "updatedAt": "2026-11-12T18:37:58.565Z"
+    },
+    "resume-blueprint": {
+      "source": "nishant-Tiwari24/cracked",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nishant-Tiwari24/cracked.git",
+      "skillPath": "skills/profile/resume-blueprint/SKILL.md",
+      "skillFolderHash": "e7c799c01d94410372c740adb3888b6a9b4edd17",
+      "pluginName": "cracked",
+      "installedAt": "2026-11-12T18:37:58.567Z",
+      "updatedAt": "2026-11-12T18:37:58.567Z"
+    },
+    "roast-my-resume": {
+      "source": "nishant-Tiwari24/cracked",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nishant-Tiwari24/cracked.git",
+      "skillPath": "skills/profile/roast-my-resume/SKILL.md",
+      "skillFolderHash": "7b56da5152190ed0215e7539b5e84970cf74e8b9",
+      "pluginName": "cracked",
+      "installedAt": "2026-11-12T18:37:58.570Z",
+      "updatedAt": "2026-11-12T18:37:58.570Z"
+    },
+    "setup-cracked": {
+      "source": "nishant-Tiwari24/cracked",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nishant-Tiwari24/cracked.git",
+      "skillPath": "skills/core/setup-cracked/SKILL.md",
+      "skillFolderHash": "9945b7b8ac237db58fd7bd37f5bbac08912d0869",
+      "pluginName": "cracked",
+      "installedAt": "2026-11-12T18:37:58.572Z",
+      "updatedAt": "2026-11-12T18:37:58.572Z"
+    },
+    "system-design-mock": {
+      "source": "nishant-Tiwari24/cracked",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nishant-Tiwari24/cracked.git",
+      "skillPath": "skills/interview/system-design-mock/SKILL.md",
+      "skillFolderHash": "e5e3e284fc94a975cf0def053af65144886cbb9d",
+      "pluginName": "cracked",
+      "installedAt": "2026-11-12T18:37:58.574Z",
+      "updatedAt": "2026-11-12T18:37:58.574Z"
     }
   },
   "dismissed": {

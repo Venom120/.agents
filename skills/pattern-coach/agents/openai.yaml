@@ -1,0 +1,3 @@
+interface:
+  display_name: "Pattern Coach"
+  short_description: "Learn DSA patterns through Socratic hints"

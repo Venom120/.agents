@@ -1,0 +1,3 @@
+interface:
+  display_name: "OA Simulator"
+  short_description: "Timed online assessment with hidden tests"

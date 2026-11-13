@@ -1,496 +1,222 @@
 ---
 name: performance-optimization
-description: Optimizes application performance across frontend, backend, queries, and databases. Use when performance requirements exist, when you suspect performance regressions, when Core Web Vitals or load times need improvement, when N+1 query patterns need fixing, or when profiling reveals bottlenecks.
+description: >
+  Finds and fixes game frame-rate problems by measurement in Godot, Unity, Unreal or Roblox: CPU-
+  vs GPU-bound, then the biggest fix (draw calls, pooling, GC spikes). Use for low FPS, stutter, a
+  first-use hitch, or requests to optimize or profile. Not for build size (`unity-build-size`),
+  physics jitter (`physics-tuning`) or network lag (`roblox-networking`, `godot-multiplayer`).
 ---
 
-# Performance Optimization
+# Performance optimization
 
-## Overview
+The loop: **set a budget, measure, find the one bottleneck, fix it, measure again, report the
+numbers.** Guesses usually target the wrong system, so nothing changes until a profiler or a
+frame-time capture says where the time goes. This skill is the cross-engine method and the
+fixes that recur; each engine's profiler is listed below and in the reference.
 
-Measure before optimizing. Performance work without measurement is guessing — and guessing leads to premature optimization that adds complexity without improving what matters. Profile first, identify the actual bottleneck, fix it, measure again. Optimize only what measurements prove matters.
+## When to use
 
-## When to Use
+- The frame rate is low or uneven, or a target (60 FPS desktop, 30 or 60 on mobile) is missed.
+- Hitches: first-time effects, loading mid-game, periodic GC pauses, big fights.
+- Choosing what to optimize, setting budgets, or adding a performance check to CI.
 
-- Performance requirements exist in the spec (load time budgets, response time SLAs)
-- Users or monitoring report slow behavior
-- Core Web Vitals scores are below thresholds
-- You suspect a change introduced a regression
-- Building features that handle large datasets or high traffic
+**Not this skill:** physics stability (`physics-tuning`), install or download size
+(`unity-build-size`), network latency (`roblox-networking`, `godot-multiplayer`), shader maths
+(`shader-programming`).
 
-**When NOT to use:** Don't optimize before you have evidence of a problem. Premature optimization adds complexity that costs more than the performance it gains.
+## Core workflow
 
-## Core Web Vitals Targets
+1. **Turn the complaint into a number.** Target FPS gives the budget: 60 FPS is 16.67 ms, 30 is
+   33.3 ms, 120 is 8.33 ms. Find a repeatable worst-case scene and save it (a test level, a
+   recorded input, a fixed seed).
+2. **Uncap before measuring.** VSync and frame caps hide headroom: a 4 ms frame and a 15 ms
+   frame both show 60 FPS. Godot `--disable-vsync` (and `--max-fps 0`); Unity
+   `QualitySettings.vSyncCount = 0` with `Application.targetFrameRate = -1` on desktop; Unreal
+   `r.VSync 0` and `t.MaxFPS 0`. Then read frame time in ms, not FPS.
+3. **Profile a release-like build on target hardware.** Editor and debug builds add overhead
+   and skip compiler optimization; use a Godot release export, a Unity Development build with
+   the profiler attached, or an Unreal Development or Test build.
+4. **Split CPU from GPU.** Compare main-thread, render-thread and GPU time. The side closest to
+   the frame time is the bottleneck; fixing the other side changes nothing.
+5. **Fix the single biggest cost**, preferring doing less work (cache, partition space, run less
+   often) over polishing a hot line. Then apply the matching fix below.
+6. **Re-measure the same scene on the same machine**, three runs each, and keep or revert on
+   the numbers.
+7. **Set budgets** per subsystem and per asset so the fix stays fixed, and add the frame-time
+   check to CI where the engine allows it.
+8. **Report** the scene, hardware, build type, before and after (average and p95 or p99 frame
+   time), the bottleneck and the fix. Say what was measured headless or in the editor and what
+   still needs the user's device.
 
-| Metric | Good | Needs Improvement | Poor |
-|--------|------|-------------------|------|
-| **LCP** (Largest Contentful Paint) | ≤ 2.5s | ≤ 4.0s | > 4.0s |
-| **INP** (Interaction to Next Paint) | ≤ 200ms | ≤ 500ms | > 500ms |
-| **CLS** (Cumulative Layout Shift) | ≤ 0.1 | ≤ 0.25 | > 0.25 |
+## Patterns
 
-## The Optimization Workflow
+### 1. Frame budget split
 
-```
-1. MEASURE  → Establish baseline with real data
-2. IDENTIFY → Find the actual bottleneck (not assumed)
-3. FIX      → Address the specific bottleneck
-4. VERIFY   → Measure again; keep or revert
-5. GUARD    → Add monitoring or tests to prevent regression
-```
-
-### Step 1: Measure
-
-Two complementary approaches — use both:
-
-- **Synthetic (Lighthouse, DevTools Performance tab):** Controlled conditions, reproducible. Best for CI regression detection and isolating specific issues.
-- **RUM (web-vitals library, CrUX):** Real user data in real conditions. Required to validate that a fix actually improved user experience.
-
-**Frontend:**
-```bash
-# Synthetic: Lighthouse in Chrome DevTools (or CI)
-# Chrome DevTools → Performance tab → Record
-# Chrome DevTools MCP → Performance trace
-
-# RUM: Web Vitals library in code
-import { onLCP, onINP, onCLS } from 'web-vitals';
-
-onLCP(console.log);
-onINP(console.log);
-onCLS(console.log);
+```text
+@60 FPS = 16.67 ms. The slower of CPU frame and GPU frame sets the frame rate.
+Example sub-budgets: gameplay/scripts ~5 ms · physics ~3 ms · render submit ~4 ms · UI ~2 ms · slack.
+Mobile: keep 20-30% headroom so the game survives thermal throttling.
 ```
 
-**Backend:**
-```bash
-# Response time logging
-# Application Performance Monitoring (APM)
-# Database query logging with timing
+### 2. Where each engine reports the split
 
-# Simple timing
-console.time('db-query');
-const result = await db.query(...);
-console.timeEnd('db-query');
+```text
+Godot 4.7     : Debugger > Profiler (script and physics), Visual Profiler (CPU vs GPU render time
+                per pass), Monitors (FPS, draw calls, memory, pipeline compilations).
+                Performance.get_monitor(TIME_PROCESS) is the worst frame of the last second in
+                SECONDS, refreshed once a second; time frames yourself for per-frame spikes.
+Unity 6.3 LTS : Profiler window + Frame Debugger. ProfilerRecorder on "CPU Main Thread Frame Time"
+                and "GPU Frame Time" (release players need Frame Timing Stats in Player Settings).
+Unreal 5.8    : stat unit (Frame / Game / Draw / RHIT / GPU), stat scenerendering (draw calls),
+                Unreal Insights; `csvprofile frames=600` writes a CSV capture you can read.
+Roblox        : MicroProfiler (Ctrl+F6 in Studio and the desktop client; mobile via its web UI).
+# Game and Draw are CPU threads; GPU is the graphics card. Whichever is nearest Frame wins.
 ```
 
-### Where to Start Measuring
+**Roblox:** profile on a mid-range phone, because a capped desktop hides the problem. With
+Studio Assistant, Roblox's built-in `rbx-perf-profiling` (reads MicroProfiler captures) and
+`rbx-scene-analysis` (rendering cost, memory, leaked instances) give real data; use
+`roblox-studio-workflow` to run checks in Studio, `roblox-physics` for assembly and simulation
+cost, and `roblox-networking` when "lag" means network delay rather than frame time.
 
-Use the symptom to decide what to measure first:
+### 3. Headless CPU frame-time check (Godot)
 
-```
-What is slow?
-├── First page load
-│   ├── Large bundle? --> Measure bundle size, check code splitting
-│   ├── Slow server response? --> Measure TTFB in DevTools Network waterfall
-│   │   ├── DNS long? --> Add dns-prefetch / preconnect for known origins
-│   │   ├── TCP/TLS long? --> Enable HTTP/2, check edge deployment, keep-alive
-│   │   └── Waiting (server) long? --> Profile backend, check queries and caching
-│   └── Render-blocking resources? --> Check network waterfall for CSS/JS blocking
-├── Interaction feels sluggish
-│   ├── UI freezes on click? --> Profile main thread, look for long tasks (>50ms)
-│   ├── Form input lag? --> Check re-renders, controlled component overhead
-│   └── Animation jank? --> Check layout thrashing, forced reflows
-├── Page after navigation
-│   ├── Data loading? --> Measure API response times, check for waterfalls
-│   └── Client rendering? --> Profile component render time, check for N+1 fetches
-└── Backend / API
-    ├── Single endpoint slow? --> Profile database queries, check indexes
-    ├── All endpoints slow? --> Check connection pool, memory, CPU
-    └── Intermittent slowness? --> Check for lock contention, GC pauses, external deps
-```
+```gdscript
+# tools/frame_stats.gd: CPU frame time of one scene, headless (no GPU work is measured).
+# godot --headless --path . --script res://tools/frame_stats.gd -- res://levels/worst.tscn 600 16.6
+extends SceneTree
 
-### Step 2: Identify the Bottleneck
-
-Common bottlenecks by category:
-
-**Frontend:**
-
-| Symptom | Likely Cause | Investigation |
-|---------|-------------|---------------|
-| Slow LCP | Large images, render-blocking resources, slow server | Check network waterfall, image sizes |
-| High CLS | Images without dimensions, late-loading content, font shifts | Check layout shift attribution |
-| Poor INP | Heavy JavaScript on main thread, large DOM updates | Check long tasks in Performance trace |
-| Slow initial load | Large bundle, many network requests | Check bundle size, code splitting |
-
-**Backend:**
-
-| Symptom | Likely Cause | Investigation |
-|---------|-------------|---------------|
-| Slow API responses | N+1 queries, missing indexes, unoptimized queries | Check database query log |
-| Memory growth | Leaked references, unbounded caches, large payloads | Heap snapshot analysis |
-| CPU spikes | Synchronous heavy computation, regex backtracking | CPU profiling |
-| High latency | Missing caching, redundant computation, network hops | Trace requests through the stack |
-
-### Step 3: Fix Common Anti-Patterns
-
-#### N+1 Queries (Backend)
-
-```typescript
-// BAD: N+1 — one query per task for the owner
-const tasks = await db.tasks.findMany();
-for (const task of tasks) {
-  task.owner = await db.users.findUnique({ where: { id: task.ownerId } });
-}
-
-// GOOD: Single query with join/include
-const tasks = await db.tasks.findMany({
-  include: { owner: true },
-});
+func _initialize() -> void:
+    var args := OS.get_cmdline_user_args()
+    var scene_path := args[0] if args.size() > 0 else "res://main.tscn"
+    var frames := int(args[1]) if args.size() > 1 else 600
+    var budget_ms := float(args[2]) if args.size() > 2 else 16.6
+    OS.low_processor_usage_mode_sleep_usec = 0          # headless otherwise sleeps ~6.9 ms a frame
+    root.add_child(load(scene_path).instantiate())
+    for i in 60:                                       # skip loading and first-use spikes
+        await process_frame
+    var ms := PackedFloat64Array()
+    var last := Time.get_ticks_usec()
+    for i in frames:
+        await process_frame
+        var now := Time.get_ticks_usec()
+        ms.append((now - last) / 1000.0)               # whole frame: scripts, physics, engine
+        last = now
+    ms.sort()
+    var avg := 0.0
+    for v in ms:
+        avg += v / ms.size()
+    var p95 := ms[int(ms.size() * 0.95)]
+    var p99 := ms[int(ms.size() * 0.99)]
+    var over := ms.size() - ms.bsearch(budget_ms, false)
+    print("FRAME avg=%.2fms p95=%.2fms p99=%.2fms max=%.2fms over_budget=%d/%d"
+            % [avg, p95, p99, ms[-1], over, ms.size()])
+    quit(1 if p95 > budget_ms else 0)
 ```
 
-#### Unbounded Data Fetching
+It exits 1 when p95 exceeds the budget, so it can gate CI for script and physics cost. Headless
+mode has no renderer, so it says nothing about GPU time or draw calls; for those, ask the user to
+run the game with `--disable-vsync --print-fps` or open the Visual Profiler and report the CPU and
+GPU ms for the same scene. A shared or busy machine adds noise, so compare runs on one machine.
 
-```typescript
-// BAD: Fetching all records
-const allTasks = await db.tasks.findMany();
+### 4. Object pooling (stop allocating and freeing in hot loops)
 
-// GOOD: Paginated with limits
-const tasks = await db.tasks.findMany({
-  take: 20,
-  skip: (page - 1) * 20,
-  orderBy: { createdAt: 'desc' },
-});
+```gdscript
+var _pool: Array[Node2D] = []                     # Node3D for 3D; both have `visible`
+func acquire() -> Node2D:
+    var n: Node2D = _pool.pop_back() if not _pool.is_empty() else bullet_scene.instantiate()
+    n.set_process(true); n.visible = true
+    return n
+func release(n: Node2D) -> void:
+    n.set_process(false); n.visible = false       # disable + hide; don't free
+    _pool.append(n)
+# Pre-warm at load. Also reset velocity, timers and signal connections on release.
 ```
 
-#### Queries That Ignore Their Index
+### 5. Cut draw calls and state changes
 
-"Add an index" is the guess. The query plan is the measurement:
-
-```sql
-EXPLAIN ANALYZE
-SELECT id, title FROM tasks
-WHERE owner_id = 42 ORDER BY created_at DESC LIMIT 20;
+```text
+- Atlas textures and share materials so sprites and meshes batch.
+- Identical meshes: GPU instancing (Unity; under URP/HDRP the SRP Batcher or GPU Resident Drawer
+  takes over), MultiMesh/MultiMeshInstance (Godot), Instanced Static Mesh (Unreal).
+- Static geometry: static batching or baking. Bake lighting that does not move.
+- Overdraw: fewer large overlapping transparent and particle layers.
+- Fill-rate bound: lower render resolution or scale (2x pixel ratio is 4x the pixels).
+Measure draw calls and GPU ms before and after; both should drop.
 ```
 
-Three things in the output decide the fix:
+### 6. Kill per-frame allocations (GC spikes are periodic hitches)
 
-| What you see | What it means |
-|---|---|
-| `Seq Scan` on a large table where you expected an index | No usable index for this predicate |
-| Estimated `rows=` off from actual by an order of magnitude | Stale statistics; the planner is choosing on bad information |
-| A `Sort` node above the scan | The index covers the filter but not the `ORDER BY` |
-
-Index for the **shape of the query**, not the column in isolation. In a composite index, equality columns come first, then the range or sort column:
-
-```sql
-CREATE INDEX idx_tasks_owner_created ON tasks (owner_id, created_at DESC);
+```csharp
+// Unity 6.3 LTS. Steady state should be 0 B "GC Allocated In Frame".
+void Update() {
+    _hits = Physics.RaycastNonAlloc(ray, _hitBuffer);   // reuse a preallocated array
+    for (int i = 0; i < _hits; i++) { /* ... */ }
+}   // hit order is undefined and a full buffer may miss the nearest hit: size it, sort if needed
+// No LINQ, string building or FindObjectsByType in Update. Cache references once.
+// GDScript: reuse Arrays/Dictionaries instead of building new ones each _process.
 ```
 
-**When an index will not help:**
-
-| Situation | Why |
-|---|---|
-| Low selectivity, querying the dominant value (a `status` column that is 95% `active`, filtered on `active`) | A sequential scan is genuinely cheaper; the planner will ignore the index. Filtering on the rare value is the opposite case, and a partial index serves it well |
-| Leading wildcard (`LIKE '%term'`) | A B-tree cannot seek without a prefix; needs trigram or full-text |
-| Function on the column (`WHERE lower(email) = ?`) | The plain column index is unusable; index the expression instead |
-| Write-heavy table | Every index is a tax on every `INSERT`/`UPDATE`; measure the write cost, not just the read gain |
-
-Re-run `EXPLAIN ANALYZE` after. An index that did not change the plan is a revert (Step 4), and it is not free: it still costs on every write.
-
-#### Connection Pool Exhaustion
-
-The signature is distinctive: **every** endpoint slows at once, the slow time is spent waiting for a connection rather than executing, and the database reports mostly idle sessions.
-
-```typescript
-// BAD: a pool per request or per module — under serverless this multiplies
-// by instance count and exhausts the database's connection limit
-// GOOD: one pool per process, sized against the database's ceiling
-const pool = new Pool({
-  max: 10,                        // instances × max must stay under max_connections
-  idleTimeoutMillis: 30_000,
-  connectionTimeoutMillis: 5_000, // fail fast instead of queueing forever
-});
-```
-
-**Bigger is not faster.** A pool larger than what the database can execute concurrently just relocates the queue from your app to the database, where it is harder to see. When instance count is unbounded (serverless, autoscaling), a proxy that multiplexes connections (pgbouncer, RDS Proxy) is the fix, not a higher `max`.
-
-#### Missing Image Optimization (Frontend)
-
-```html
-<!-- BAD: No dimensions, no format optimization -->
-<img src="/hero.jpg" />
-
-<!-- GOOD: Hero / LCP image — art direction + resolution switching, high priority -->
-<!--
-  Two techniques combined:
-  - Art direction (media): different crop/composition per breakpoint
-  - Resolution switching (srcset + sizes): right file size per screen density
--->
-<picture>
-  <!-- Mobile: portrait crop (8:10) -->
-  <source
-    media="(max-width: 767px)"
-    srcset="/hero-mobile-400.avif 400w, /hero-mobile-800.avif 800w"
-    sizes="100vw"
-    width="800"
-    height="1000"
-    type="image/avif"
-  />
-  <source
-    media="(max-width: 767px)"
-    srcset="/hero-mobile-400.webp 400w, /hero-mobile-800.webp 800w"
-    sizes="100vw"
-    width="800"
-    height="1000"
-    type="image/webp"
-  />
-  <!-- Desktop: landscape crop (2:1) -->
-  <source
-    srcset="/hero-800.avif 800w, /hero-1200.avif 1200w, /hero-1600.avif 1600w"
-    sizes="(max-width: 1200px) 100vw, 1200px"
-    width="1200"
-    height="600"
-    type="image/avif"
-  />
-  <source
-    srcset="/hero-800.webp 800w, /hero-1200.webp 1200w, /hero-1600.webp 1600w"
-    sizes="(max-width: 1200px) 100vw, 1200px"
-    width="1200"
-    height="600"
-    type="image/webp"
-  />
-  <img
-    src="/hero-desktop.jpg"
-    width="1200"
-    height="600"
-    fetchpriority="high"
-    alt="Hero image description"
-  />
-</picture>
-
-<!-- GOOD: Below-the-fold image — lazy loaded + async decoding -->
-<img
-  src="/content.webp"
-  width="800"
-  height="400"
-  loading="lazy"
-  decoding="async"
-  alt="Content image description"
-/>
-```
-
-#### Unnecessary Re-renders (React)
-
-```tsx
-// BAD: Creates new object on every render, causing children to re-render
-function TaskList() {
-  return <TaskFilters options={{ sortBy: 'date', order: 'desc' }} />;
-}
-
-// GOOD: Stable reference
-const DEFAULT_OPTIONS = { sortBy: 'date', order: 'desc' } as const;
-function TaskList() {
-  return <TaskFilters options={DEFAULT_OPTIONS} />;
-}
-
-// Use React.memo for expensive components
-const TaskItem = React.memo(function TaskItem({ task }: Props) {
-  return <div>{/* expensive render */}</div>;
-});
-
-// Use useMemo for expensive computations
-function TaskStats({ tasks }: Props) {
-  const stats = useMemo(() => calculateStats(tasks), [tasks]);
-  return <div>{stats.completed} / {stats.total}</div>;
-}
-```
-
-#### Large Bundle Size
-
-```typescript
-// Modern bundlers (Vite, webpack 5+) handle named imports with tree-shaking automatically,
-// provided the dependency ships ESM and is marked `sideEffects: false` in package.json.
-// Profile before changing import styles — the real gains come from splitting and lazy loading.
-
-// GOOD: Dynamic import for heavy, rarely-used features
-const ChartLibrary = lazy(() => import('./ChartLibrary'));
-
-// GOOD: Route-level code splitting wrapped in Suspense
-const SettingsPage = lazy(() => import('./pages/Settings'));
-
-function App() {
-  return (
-    <Suspense fallback={<Spinner />}>
-      <SettingsPage />
-    </Suspense>
-  );
-}
-```
-
-#### Missing Caching (Backend)
-
-Cache what is expensive to produce and read far more often than it changes. Caching a query that was already fast adds a network hop, a staleness bug, and an eviction policy to maintain, in exchange for nothing.
-
-**Pick the layer deliberately:**
-
-| Layer | Visible to | Use when | Cost |
-|---|---|---|---|
-| In-process (`Map`, LRU) | One instance | Small, hot, per-instance staleness is acceptable | Each instance drifts independently; invalidation reaches only one |
-| Shared (Redis, Memcached) | All instances | Instances must agree, or the value is expensive to recompute | A network hop, and another service to run and monitor |
-| CDN / edge | Everyone, per URL | Responses are public and identical for a given key | Invalidation is the hard part; assume you cannot recall a bad response quickly |
-
-```typescript
-// Cache frequently-read, rarely-changed data
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
-let cachedConfig: AppConfig | null = null;
-let cacheExpiry = 0;
-
-async function getAppConfig(): Promise<AppConfig> {
-  if (cachedConfig && Date.now() < cacheExpiry) {
-    return cachedConfig;
-  }
-  cachedConfig = await db.config.findFirst();
-  cacheExpiry = Date.now() + CACHE_TTL;
-  return cachedConfig;
-}
-
-// HTTP caching headers for static assets
-app.use('/static', express.static('public', {
-  maxAge: '1y',           // Cache for 1 year
-  immutable: true,        // Never revalidate (use content hashing in filenames)
-}));
-
-// Cache-Control for API responses
-res.set('Cache-Control', 'public, max-age=300'); // 5 minutes
-```
-
-**Key design decides correctness.** Every input that changes the response belongs in the key: tenant, locale, permissions, feature flags. A key that omits the viewer is how one user's data gets served to another, and that ships as a performance win.
-
-**Choose one invalidation strategy, not three:**
-
-| Strategy | Trade-off |
-|---|---|
-| TTL | Simplest. You accept staleness up to the TTL, so state the acceptable window explicitly |
-| Event or tag based | Fresh on write, but writers now have to know the cache topology |
-| Versioned keys (`user:42:profile:v7`) | Never invalidate, just stop reading old keys. Costs memory until eviction |
-
-**Guard against the stampede.** A hot key expires, every concurrent request misses together, and the origin takes the full load at once, which is how a cache turns into an outage instead of preventing one. Serve stale while a single request recomputes (`stale-while-revalidate`), or coalesce concurrent misses behind one in-flight promise so N waiters cause one recompute.
-
-**Do not cache:** anything whose staleness is a correctness bug (balances, permissions, inventory at checkout), or per-user data under a key that does not identify the user. See `../../references/performance-checklist.md` for request coalescing, write strategies, negative caching, and the cache checklist.
-
-### Step 4: Verify (Keep or Revert)
-
-A fix is a hypothesis until you re-measure. This step decides whether it survives.
-
-**Re-measure the way you measured the baseline:** same command, same conditions, same fixed budget (wall-clock, sample count, or request count). A baseline taken on a cold cache against a result taken on a warm one measures the cache, not your change.
-
-**Change one thing at a time.** Three optimizations landed together produce one number, and you cannot attribute it. If they must ship together, measure each in isolation first.
-
-**Beat the noise, not just the mean.** Repeat the measurement and compare the delta against run-to-run variance. A 3% gain inside ±5% variance is not a gain; it is a different sample.
-
-Then decide, strictly:
-
-| Result vs. baseline | Action |
-|---|---|
-| Past the threshold, tests green | **Keep.** Commit with the before/after numbers in the message. |
-| Within noise (no measurable change) | **Revert.** |
-| Worse | **Revert.** |
-| Improved, but a test went red | **Revert.** A regression wearing a win's clothing. |
-
-**"Neutral" is a revert, not a keep.** This is the step teams skip: the change is already written, throwing it away feels wasteful, so it lands unmeasured, and the codebase accretes complexity that never bought anything. Code you keep, you maintain forever. Make it pay for itself.
-
-**Correctness gates the metric.** The suite stays green *and* the number moves. An "optimization" that wins by dropping work the product needed (skipping a validation, caching something that must be fresh, removing an `await` that was load-bearing) is a regression, not a win.
-
-#### Log every attempt, including the reverted ones
-
-Reverted work leaves no trace in git history, which is exactly why the same dead idea gets tried again next quarter. Keep a short ledger so a discarded idea stays discarded:
-
-| Idea | Baseline → Result | Verdict | Why |
-|---|---|---|---|
-| Memoize the row component | INP 240ms → 235ms | reverted | Inside noise (±15ms). Rows weren't the bottleneck. |
-| Virtualize the list | INP 240ms → 90ms | kept | Long tasks gone from the trace. |
-| Preconnect to the API origin | LCP 2.8s → 2.8s | reverted | Already same-origin. |
-
-A section in the PR description or a `PERF.md` in the repo both work. What matters is that the next person (or the next agent) reads it before proposing an experiment, and doesn't re-run one that already failed.
-
-### Step 5: Guard Against Regression
-
-Guard the metric the user actually feels, not every available number. Use the
-same LCP, INP, p95 latency, or other primary metric that justified the fix.
-
-Use two complementary layers when the surface is user-facing:
-
-- **Synthetic CI gate:** Catch reproducible regressions before merge with a
-  performance budget. Repeat noisy measurements or compare a median/trend so
-  normal run-to-run variance does not turn the gate into a flaky check.
-- **Field monitoring:** Alert on a meaningful p75 movement in RUM data. Use
-  attributed `web-vitals` data to locate the cause; treat CrUX's rolling window
-  as confirmation rather than an immediate alert.
-
-When either guard fires, return to Step 1 and establish a fresh baseline before
-proposing another fix.
-
-**Set budgets and enforce them:**
-
-```
-JavaScript bundle: < 200KB gzipped (initial load)
-CSS: < 50KB gzipped
-Images: < 200KB per image (above the fold)
-Fonts: < 100KB total
-API response time: < 200ms (p95)
-Time to Interactive: < 3.5s on 4G
-Lighthouse Performance score: ≥ 90
-```
-
-**Enforce in CI:**
-```bash
-# Bundle size check
-npx bundlesize --config bundlesize.config.json
-
-# Lighthouse CI
-npx lhci autorun
-```
-
-## See Also
-
-For detailed performance checklists, optimization commands, and anti-pattern reference, see `../../references/performance-checklist.md`.
-
-
-## Common Rationalizations
-
-| Rationalization | Reality |
-|---|---|
-| "We'll optimize later" | Performance debt compounds. Fix obvious anti-patterns now, defer micro-optimizations. |
-| "It's fast on my machine" | Your machine isn't the user's. Profile on representative hardware and networks. |
-| "This optimization is obvious" | If you didn't measure, you don't know. Profile first. |
-| "Users won't notice 100ms" | Research shows 100ms delays impact conversion rates. Users notice more than you think. |
-| "The framework handles performance" | Frameworks prevent some issues but can't fix N+1 queries or oversized bundles. |
-| "The query is slow, add an index" | Read the plan first. The index may already exist and be unusable, and every index taxes writes forever. |
-| "Just cache it" | Caching an already-cheap call buys nothing and adds a staleness bug. Cache what is expensive *and* re-read far more than written. |
-| "Raise the pool size, we're running out of connections" | A pool bigger than the database can serve moves the queue somewhere less visible. Find what holds connections. |
-| "It didn't help much, but it doesn't hurt" | Neutral changes are a revert. You pay maintenance on them forever and got nothing back. |
-| "We already wrote it, may as well keep it" | Sunk cost. The measurement doesn't care how long the change took to write. |
-| "The improvement is obvious, no need to re-measure" | Then re-measuring is cheap and proves it. Unmeasured wins are how neutral complexity lands. |
-
-## Red Flags
-
-- Optimization without profiling data to justify it
-- N+1 query patterns in data fetching
-- An index added without a query plan before and after to justify it
-- A cache key that omits an input the response depends on (tenant, locale, viewer)
-- A cache with no stated staleness window and no invalidation strategy
-- Connection pool size raised in response to exhaustion, without finding what holds connections
-- List endpoints without pagination
-- Images without dimensions, lazy loading, or responsive sizes
-- Bundle size growing without review
-- No performance monitoring in production
-- `React.memo` and `useMemo` everywhere (overusing is as bad as underusing)
-- Optimizations kept without a re-measurement that justifies them
-- Several optimizations bundled into one measurement, so no single change can be attributed
-- A "win" that required a test to be changed, skipped, or deleted
-- The same failed optimization attempted more than once because nobody recorded the first attempt
-
-## Verification
-
-After any performance-related change:
-
-- [ ] Before and after measurements exist (specific numbers)
-- [ ] The result was re-measured the same way as the baseline (same command, same conditions)
-- [ ] The improvement exceeds run-to-run variance, not just the mean
-- [ ] Changes that didn't beat the baseline were reverted, not kept as neutral
-- [ ] Attempts are logged, kept and reverted alike, so a dead idea isn't re-run
-- [ ] The specific bottleneck is identified and addressed
-- [ ] Core Web Vitals are within "Good" thresholds
-- [ ] Bundle size hasn't increased significantly
-- [ ] No N+1 queries in new data fetching code
-- [ ] Any new index is justified by a query plan before and after, and its write cost was considered
-- [ ] Any new cache states what it keys on and how it goes stale
-- [ ] The measured user-facing metric has a synthetic budget or field monitor that can detect regression
-- [ ] Existing tests still pass (optimization didn't break behavior)
+## Gotchas
+
+- **Measuring with VSync on.** The frame rate sits at the refresh rate until the frame is
+  already over budget, so fixes look like they did nothing. Uncap, then read ms.
+- **Reading `TIME_PROCESS` every frame in Godot.** It is the worst frame of the last second,
+  updated once a second, so per-frame samples repeat one value. Time frames directly.
+- **Shader and pipeline compile hitches** the first time an effect, enemy or material appears,
+  often gone on the second run because the driver cached it. Godot 4.4+: watch the pipeline
+  compilation monitors, load features early and keep hidden instances of spawned effects in the
+  scene. Unity 6: trace and warm PSOs with `GraphicsStateCollection` (experimental) or warm
+  shader variants on older APIs. Unreal: PSO precaching and a bundled PSO cache.
+- **Thermal throttling on phones**: 60 FPS for two minutes, then a drop. Ask the user to run a
+  15-minute session on the device and report frame time at the start and end; cap the frame rate
+  and keep headroom.
+- **Unity Android and iOS run at 30 FPS by default** (`targetFrameRate = -1`). Set
+  `Application.targetFrameRate` deliberately before calling it a performance problem.
+- **Fixing the wrong side.** CPU micro-optimizations do nothing for a GPU-bound frame, and the
+  reverse.
+- **Instantiate and free in hot loops** cause fragmentation and GC spikes. Pool them.
+- **Unity "Enable GPU Instancing" with no effect** under URP/HDRP: the SRP Batcher takes
+  precedence for compatible shaders. Check the Frame Debugger; for many identical meshes use the
+  GPU Resident Drawer (Forward+, compute-capable APIs, not OpenGL ES).
+- **Deep Profile or editor numbers reported as results.** Both distort timings; quote a build.
+- **No budgets.** Without per-subsystem ms and asset ceilings, performance regresses quietly.
+- **Optimizing a prototype** before it is fun or measured adds complexity that may be thrown away.
+
+## References
+
+- `references/profiling-and-budgets.md`: read when you need a per-engine profiler walkthrough,
+  the CPU-vs-GPU triage steps, a generic pool with prewarm and overflow policy, batching and
+  instancing rules per engine, allocation rules for C# and GDScript, do-less techniques (LOD,
+  culling, time-slicing) or starting asset budgets.
+
+## Related skills
+
+- `physics-tuning`: fixed-step cost, sleeping bodies, broadphase layers.
+- `shader-programming`: per-pixel cost of an effect; `godot-shaders` for Godot shader compiles.
+- `godot-export`, `unity-build-pipeline`, `unreal-packaging`: building the release build you
+  should profile.
+- `procedural-gen`, `game-ai`: common CPU hotspots (generation, pathfinding) to defer or slice.
+
+## Version notes
+
+Last verified: 2026-11-11.
+
+- Godot 4.7: `TIME_PROCESS` and `TIME_PHYSICS_PROCESS` are per-second maxima set in
+  `main/main.cpp`; headless sleeps `low_processor_usage_mode_sleep_usec` per frame
+  (`core/os/os.cpp`); CLI `--disable-vsync`, `--max-fps`, `--print-fps`. Pipeline
+  precompilation and its monitors arrived in 4.4, the shader baker in 4.5
+  (https://docs.godotengine.org/en/stable/tutorials/performance/pipeline_compilations.html).
+  The frame-time script was run on 4.7.2 headless.
+- Unity 6.3: `targetFrameRate` defaults and the 30 FPS mobile default
+  (https://docs.unity.com/en-us/engine/6000.3/script-reference/unityengine/application/targetframerate);
+  `GraphicsStateCollection` is experimental
+  (https://docs.unity.com/en-us/engine/6000.3/manual/materials-and-shaders/shaders/shader-troubleshooting/shader-reduce-stalling/shader-prevent-stutter/shader-pso-trace-warming/shader-pso-introduction).
+- Unreal: PSO precaching (https://dev.epicgames.com/documentation/unreal-engine/pso-precaching-for-unreal-engine);
+  `csvprofile` (https://docs.unrealengine.com/4.27/en-US/TestingAndOptimization/PerformanceAndProfiling/CSVProfiler).
+- Roblox: MicroProfiler shortcuts and mobile web UI
+  (https://create.roblox.com/docs/performance-optimization/microprofiler.md); built-in
+  Assistant skills `rbx-perf-profiling` and `rbx-scene-analysis`
+  (https://create.roblox.com/docs/assistant/skills.md).
+- RenderDoc 1.47 (2026-10-31), Tracy 0.15.0 (2026-11-05), Unity Project Auditor package 3.2.0
+  (2026-11-03): GitHub releases and the Unity package registry.

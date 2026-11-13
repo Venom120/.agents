@@ -1,0 +1,5 @@
+interface:
+  display_name: "Setup cracked"
+  short_description: "One-time setup: profile, target companies, first plan"
+policy:
+  allow_implicit_invocation: false
