@@ -23,10 +23,10 @@ Python bytecode, and credentials are intentionally not stored here.
 
 - A running OmniRoute instance.
 - Python 3.8 or newer.
-- The `requests` package:
+- The `requests` and `rich` packages:
 
   ```powershell
-  python -m pip install requests
+  python -m pip install -r req.txt
   ```
 
 - `OMNIROUTE_MANAGE_KEY` for management endpoints.
@@ -52,6 +52,25 @@ Run the read-only exporter:
 Set-Location "$HOME\.agents\omniroute-setup"
 python .\list-models-omniroute.py
 ```
+
+The model CSV is checkpointed after each health probe. Every run automatically
+resumes completed probes from that checkpoint. To ignore saved progress and
+start every probe again, use:
+
+```powershell
+python .\list-models-omniroute.py --fresh
+```
+
+The CSV `status` column is `1` for completed probes and `0` for pending
+probes. After all probes finish, statuses are reset to `0` for the next fresh
+run. If an existing checkpoint has no completed rows, the default resume mode
+stops and instructs you to use `--fresh`. Full command output is written to `output.log` in the current
+directory; automatic resume appends to the existing log, while `--fresh`
+starts a new log. Override the path with `--log-file "path\to\run.log"`. The live terminal
+display uses Rich so it adapts to terminal width and truncates long model IDs
+instead of wrapping progress rows. The terminal shows only the compact live
+display; detailed `[PING]`, `[OK]`, `[SKIP]`, API, and progress output remains
+in the log.
 
 Run the combo builder only after reviewing the model exports:
 

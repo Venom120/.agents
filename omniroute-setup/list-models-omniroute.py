@@ -35,9 +35,14 @@
 #      cd ~/.agents/omniroute-setup
 #      python3 list-models-omniroute.py
 #
+#    By default, completed probes are resumed from the CSV checkpoint. To
+#    ignore the checkpoint and start every probe again:
+#
+#      python3 list-models-omniroute.py --fresh
+#
 # 4. The script writes five files into the current working directory:
 #
-#      omniroute_models.csv         (flat table of exportable models)
+#      omniroute_models.csv         (flat table with resumable probe status)
 #      omniroute_providers.csv      (flat table of every provider)
 #      omniroute_models_raw.json    (exact response from OmniRoute)
 #      omniroute_models.json         (only working/quota-exceeded models)
@@ -48,18 +53,33 @@
 #
 # LANGUAGE / REQUIREMENTS
 # -----------------------
-# Python 3.8+ with the `requests` library:
+# Python 3.8+ with the `requests` and `rich` libraries:
 #
-#      pip install requests
+#      python -m pip install -r req.txt
 #
 # ============================================================================
 
 import csv
+import argparse
 import json
 import os
+import sys
 from pathlib import Path
 
 import requests
+from rich.console import Console, Group
+from rich.live import Live
+from rich.panel import Panel
+from rich.progress import (
+    BarColumn,
+    Progress,
+    TaskProgressColumn,
+    TextColumn,
+    TimeElapsedColumn,
+    TimeRemainingColumn,
+)
+from rich.table import Column
+from rich.text import Text
 
 
 # ============================================================================
@@ -90,8 +110,8 @@ MODELS_API_URL = (
 
 PROVIDERS_API_URL = f"{OMNIROUTE_BASE_URL}/api/providers"
 
-REQUEST_TIMEOUT = 30
-MODEL_TEST_TIMEOUT = 15
+REQUEST_TIMEOUT = 10
+MODEL_TEST_TIMEOUT = 5
 
 MODELS_CSV = "omniroute_models.csv"
 PROVIDERS_CSV = "omniroute_providers.csv"
@@ -129,6 +149,183 @@ def normalize_value(value):
             separators=(",", ":"),
         )
     return value
+
+
+class LogStream:
+    """Write command output to the selected log without duplicating it."""
+
+    def __init__(self, handle):
+        self.handle = handle
+
+    def write(self, value):
+        self.handle.write(value)
+        self.handle.flush()
+
+    def flush(self):
+        self.handle.flush()
+
+    def isatty(self):
+        return False
+
+
+class ProgressDisplay:
+    """Render model probe progress with Rich while recording plain log lines."""
+
+    def __init__(self, total, terminal, log_handle, info_lines, models):
+        self.total = total
+        self.log_handle = log_handle
+        self.passed = sum(
+            1
+            for model in models
+            if model_status(model.get("status", 0))
+            and str(model.get("working", "")).lower() == "true"
+        )
+        self.failed = sum(
+            1
+            for model in models
+            if model_status(model.get("status", 0))
+            and str(model.get("working", "")).lower() != "true"
+        )
+        self.initial_completed = self.passed + self.failed
+        self.console = Console(
+            file=terminal,
+            force_terminal=True,
+            color_system="standard",
+            soft_wrap=False,
+        )
+        self.progress = Progress(
+            TextColumn(
+                "[{task.completed}/{task.total}]",
+                markup=False,
+                table_column=Column(
+                    width=11,
+                    no_wrap=True,
+                ),
+            ),
+            TextColumn(
+                "{task.fields[model]}",
+                table_column=Column(
+                    ratio=1,
+                    overflow="ellipsis",
+                    no_wrap=True,
+                ),
+            ),
+            BarColumn(bar_width=24),
+            TaskProgressColumn(),
+            TimeElapsedColumn(),
+            TimeRemainingColumn(),
+            TextColumn(
+                "{task.fields[state]}",
+                table_column=Column(
+                    width=24,
+                    overflow="ellipsis",
+                    no_wrap=True,
+                ),
+            ),
+            console=self.console,
+            expand=True,
+            auto_refresh=False,
+            redirect_stdout=False,
+            redirect_stderr=False,
+        )
+        self.summary = Text()
+        self.live = Live(
+            Group(self.progress, self.summary),
+            console=self.console,
+            refresh_per_second=10,
+            transient=False,
+            redirect_stdout=False,
+            redirect_stderr=False,
+        )
+        self.console.print(
+            Panel(
+                Group(
+                    Text("OMNIROUTE MODEL EXPORTER", style="bold cyan"),
+                    *(
+                        Text(line, style="white")
+                        for line in info_lines
+                    ),
+                ),
+                border_style="cyan",
+                title="OmniRoute",
+                title_align="left",
+                padding=(0, 1),
+            )
+        )
+        self.task_id = self.progress.add_task(
+            "health checks",
+            total=total,
+            completed=self.initial_completed,
+            model=(
+                "Resuming..."
+                if self.initial_completed
+                else "Starting..."
+            ),
+            state=(
+                "[yellow]checkpoint[/yellow]"
+                if self.initial_completed
+                else "[dim]waiting[/dim]"
+            ),
+        )
+        self._refresh_summary(self.initial_completed)
+        self.live.start()
+        self.live.refresh()
+
+        log_lines = [
+            "OMNIROUTE MODEL EXPORTER",
+            *info_lines,
+        ]
+        self.log_handle.write("\n".join(log_lines) + "\n")
+        self.log_handle.flush()
+
+    def update(self, completed, model_id, result=None, resumed=False):
+        state = "resumed" if resumed else (
+            "ok" if result and result.get("working") else "failed"
+        )
+        reason = ""
+        if state == "failed":
+            reason = (
+                (result or {}).get("reason")
+                or (result or {}).get("failure_reason")
+                or "unknown"
+            )
+        state_label = (
+            f"FAIL: {reason}" if reason else state.upper()
+        )
+        state_style = "green" if state in ("ok", "resumed") else "red"
+        state_text = Text(state_label, style=state_style)
+        if not resumed and result and result.get("working"):
+            self.passed += 1
+        elif not resumed:
+            self.failed += 1
+        self.progress.update(
+            self.task_id,
+            completed=completed,
+            model=model_id,
+            state=state_text,
+            refresh=True,
+        )
+        self._refresh_summary(completed)
+        self.live.refresh()
+        self.log_handle.write(
+            f"[{completed}/{self.total}] | {state_label}: {model_id}\n"
+        )
+        self.log_handle.write(
+            f"PASS: {self.passed} | FAIL: {self.failed} | "
+            f"REMAINING: {self.total - completed}\n"
+        )
+        self.log_handle.flush()
+
+    def _refresh_summary(self, completed=0):
+        remaining = max(self.total - completed, 0)
+        self.summary.plain = (
+            f"PASS: {self.passed} | FAIL: {self.failed} | "
+            f"REMAINING: {remaining}"
+        )
+        self.summary.style = "bold green"
+
+    def close(self):
+        self.live.stop()
 
 
 def is_excluded_model(model):
@@ -232,7 +429,7 @@ def probe_model(model):
         {
             "model": model_id,
             "input": "Reply with OK.",
-            "max_output_tokens": 4,
+            "max_output_tokens": 16,
         }
         if uses_responses
         else {
@@ -243,7 +440,7 @@ def probe_model(model):
                     "content": "Reply with OK.",
                 },
             ],
-            "max_tokens": 4,
+            "max_tokens": 16,
             "temperature": 0,
         }
     )
@@ -262,7 +459,11 @@ def probe_model(model):
 
         if response.ok:
             response_payload = response.json()
-            if isinstance(response_payload, dict) and "error" not in response_payload:
+            has_error = (
+                isinstance(response_payload, dict)
+                and response_payload.get("error") not in (None, "")
+            )
+            if isinstance(response_payload, dict) and not has_error:
                 return {
                     "id": model_id,
                     "working": True,
@@ -288,7 +489,7 @@ def probe_model(model):
         }
 
 
-def test_models(models):
+def test_models(models, progress_writer=None, progress_display=None):
     """Probe candidates and return each model with its health status."""
     tested_models = []
     probe_results = []
@@ -296,6 +497,18 @@ def test_models(models):
     for index, model in enumerate(models, start=1):
         model_id = str(model.get("id", ""))
         print(f"[PING {index}/{len(models)}] {model_id}")
+
+        if model_status(model.get("status", 0)):
+            print(f"[RESUME] {model_id} already completed")
+            tested_models.append(dict(model))
+            if progress_display is not None:
+                progress_display.update(
+                    index,
+                    model_id,
+                    result=model,
+                    resumed=True,
+                )
+            continue
 
         result = probe_model(model)
         probe_results.append(result)
@@ -305,7 +518,18 @@ def test_models(models):
         tested_model["failure_reason"] = (
             "" if result["working"] else result["reason"]
         )
+        tested_model["status"] = 1
         tested_models.append(tested_model)
+
+        if progress_writer is not None:
+            progress_writer(tested_models)
+
+        if progress_display is not None:
+            progress_display.update(
+                index,
+                model_id,
+                result=result,
+            )
 
         if result["working"]:
             print(f"[OK] {model_id}")
@@ -366,6 +590,7 @@ def export_models_to_csv(payload, filename=MODELS_CSV, tested_models=None):
     preferred = [
         "id",
         "name",
+        "status",
         "working",
         "failure_reason",
         "owned_by",
@@ -419,6 +644,58 @@ def export_models_to_csv(payload, filename=MODELS_CSV, tested_models=None):
         f"[OK] Exported {len(exportable_models)} models "
         f"({excluded_count} excluded or failed health check) -> {filename}"
     )
+
+
+def load_model_progress(filename=MODELS_CSV):
+    """Load saved model status values for a resumable health-check run."""
+    if not Path(filename).exists():
+        return {}
+
+    with open(filename, newline="", encoding="utf-8") as f:
+        rows = csv.DictReader(f)
+        return {
+            str(row.get("id", "")): row
+            for row in rows
+            if row.get("id")
+        }
+
+
+def model_status(value):
+    """Normalize CSV status values to an integer checkpoint flag."""
+    return 1 if str(value).strip() == "1" else 0
+
+
+def merge_saved_progress(models, saved_rows):
+    """Carry prior probe results into the current model metadata."""
+    merged = []
+
+    for model in models:
+        model_id = str(model.get("id", ""))
+        saved = saved_rows.get(model_id, {})
+        current = dict(model)
+
+        if model_status(saved.get("status", 0)):
+            current["status"] = 1
+            current["working"] = str(saved.get("working", "")).lower() == "true"
+            current["failure_reason"] = saved.get("failure_reason", "")
+        else:
+            current["status"] = 0
+
+        merged.append(current)
+
+    return merged
+
+
+def reset_model_status(models):
+    """Return completed model rows to the fresh-run checkpoint state."""
+    reset = []
+
+    for model in models:
+        current = dict(model)
+        current["status"] = 0
+        reset.append(current)
+
+    return reset
 
 
 # ============================================================================
@@ -509,7 +786,43 @@ def export_providers_to_csv(payload, filename=PROVIDERS_CSV):
 # ============================================================================
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Export OmniRoute models and providers."
+    )
+    parser.add_argument(
+        "-f",
+        "--fresh",
+        action="store_true",
+        help="Ignore saved progress and start all model health checks again.",
+    )
+    parser.add_argument(
+        "--log-file",
+        default="output.log",
+        help="Write full output to this absolute or relative log path.",
+    )
+    args = parser.parse_args()
+
+    original_stdout = sys.stdout
+    original_stderr = sys.stderr
+    log_path = Path(args.log_file).expanduser().resolve()
+    log_mode = (
+        "w"
+        if args.fresh or not Path(MODELS_CSV).exists()
+        else "a"
+    )
+    log_handle = open(log_path, log_mode, encoding="utf-8")
+    sys.stdout = LogStream(log_handle)
+    sys.stderr = LogStream(log_handle)
+    progress_display = None
+
     try:
+        if log_mode == "a":
+            print()
+            print("=" * 80)
+            print("[RESUME] Continuing with the existing output log.")
+            print("=" * 80)
+            print()
+
         if not OMNIROUTE_MANAGE_KEY:
             raise RuntimeError(
                 "OMNIROUTE_MANAGE_KEY is not set.\n\n"
@@ -542,7 +855,62 @@ if __name__ == "__main__":
             for model in all_models
             if isinstance(model, dict) and not is_excluded_model(model)
         ]
-        tested_models, _probe_results = test_models(candidate_models)
+
+        saved_rows = load_model_progress(MODELS_CSV)
+        if args.fresh:
+            candidate_models = reset_model_status(candidate_models)
+        elif saved_rows:
+            if not any(
+                model_status(row.get("status", 0))
+                for row in saved_rows.values()
+            ):
+                raise RuntimeError(
+                    "No resumable model probes were found in the checkpoint. "
+                    "Use --fresh to start all probes from the beginning."
+                )
+            candidate_models = merge_saved_progress(
+                candidate_models,
+                saved_rows,
+            )
+        else:
+            candidate_models = reset_model_status(candidate_models)
+
+        progress_by_id = {
+            str(model.get("id", "")): dict(model)
+            for model in candidate_models
+        }
+
+        def save_progress(completed_models):
+            for model in completed_models:
+                progress_by_id[str(model.get("id", ""))] = dict(model)
+
+            export_models_to_csv(
+                models_payload,
+                MODELS_CSV,
+                list(progress_by_id.values()),
+            )
+
+        export_models_to_csv(
+            models_payload,
+            MODELS_CSV,
+            candidate_models,
+        )
+        progress_display = ProgressDisplay(
+            len(candidate_models),
+            original_stdout,
+            log_handle,
+            [
+                f"Health checks: {len(candidate_models)} models",
+                f"Endpoint: {OMNIROUTE_BASE_URL}",
+                f"Log file: {log_path.name}",
+            ],
+            candidate_models,
+        )
+        tested_models, _probe_results = test_models(
+            candidate_models,
+            progress_writer=save_progress,
+            progress_display=progress_display,
+        )
 
         export_models_to_csv(models_payload, MODELS_CSV, tested_models)
         save_filtered_models(models_payload, tested_models)
@@ -551,6 +919,12 @@ if __name__ == "__main__":
         print(
             f"[INFO] Health check marked {working_count} of "
             f"{len(tested_models)} models as working"
+        )
+
+        export_models_to_csv(
+            models_payload,
+            MODELS_CSV,
+            reset_model_status(tested_models),
         )
 
         save_raw_json(
@@ -600,10 +974,23 @@ if __name__ == "__main__":
         print()
         print("[ERROR] OmniRoute API request failed:")
         print(e)
+        original_stdout.write(
+            f"\n\033[31m[ERROR] OmniRoute API request failed: {e}\033[0m\n"
+        )
+        original_stdout.flush()
         raise SystemExit(1)
 
     except (TypeError, ValueError, RuntimeError) as e:
         print()
         print("[ERROR]")
         print(e)
+        original_stdout.write(f"\n\033[31m[ERROR] {e}\033[0m\n")
+        original_stdout.flush()
         raise SystemExit(1)
+
+    finally:
+        if progress_display is not None:
+            progress_display.close()
+        sys.stdout = original_stdout
+        sys.stderr = original_stderr
+        log_handle.close()

@@ -136,6 +136,7 @@ COMBOS = {
             "kr/minimax-m2.1",
             "no-think/kr/claude-sonnet-4.5",
             "no-think/kr/claude-haiku-4.5",
+            "gh/auto",
             "antigravity/gemini-3-flash",
             "gemini/gemini-3-flash-preview",
             "gemini/gemini-2.5-flash",
@@ -151,6 +152,7 @@ COMBOS = {
             "kr/minimax-m2.1",
             "antigravity/gemini-3-flash",
             "gemini/gemini-3-flash-preview",
+            "gh/auto",
             "no-think/kr/claude-sonnet-4.5",
             "groq/allam-2-7b",
         ],
@@ -192,6 +194,7 @@ COMBOS = {
             "gemini/gemini-3.1-flash-lite",
             "gc/grok-4.7",
             "kr/qwen3-coder-next",
+            "gh/auto",
         ],
     },
     "free-vision": {
