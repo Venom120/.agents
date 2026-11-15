@@ -762,6 +762,555 @@
       "pluginName": "cracked",
       "installedAt": "2026-11-12T18:37:58.574Z",
       "updatedAt": "2026-11-12T18:37:58.574Z"
+    },
+    "adding-guardrails": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/adding-guardrails/SKILL.md",
+      "skillFolderHash": "677999e580875929d6c130ddbf8e0e03fe70c4f9",
+      "installedAt": "2026-11-15T09:01:28.218Z",
+      "updatedAt": "2026-11-15T09:01:28.218Z"
+    },
+    "agent-health-timeout": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/agent-health-timeout/SKILL.md",
+      "skillFolderHash": "b6ccd97a29064ddb665e12a6f35de43bc460f781",
+      "installedAt": "2026-11-15T09:01:28.221Z",
+      "updatedAt": "2026-11-15T09:01:28.221Z"
+    },
+    "agent-permission-scoping": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/agent-permission-scoping/SKILL.md",
+      "skillFolderHash": "f4971cc3d94968974822012787f0cbfc3bf684fd",
+      "installedAt": "2026-11-15T09:01:28.224Z",
+      "updatedAt": "2026-11-15T09:01:28.224Z"
+    },
+    "agent-session-isolation": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/agent-session-isolation/SKILL.md",
+      "skillFolderHash": "51316c5390849330f72093c81c948fea72d37927",
+      "installedAt": "2026-11-15T09:01:28.226Z",
+      "updatedAt": "2026-11-15T09:01:28.226Z"
+    },
+    "agent-step-logging": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/agent-step-logging/SKILL.md",
+      "skillFolderHash": "e551c729b7301b72d5932a7bf347cdf7fb63c08a",
+      "installedAt": "2026-11-15T09:01:28.227Z",
+      "updatedAt": "2026-11-15T09:01:28.227Z"
+    },
+    "agent-supervisor-router": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/agent-supervisor-router/SKILL.md",
+      "skillFolderHash": "3a078e5c7300e3c8f1ee4aeb46788c746c70756a",
+      "installedAt": "2026-11-15T09:01:28.229Z",
+      "updatedAt": "2026-11-15T09:01:28.229Z"
+    },
+    "agent-telemetry": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/agent-telemetry/SKILL.md",
+      "skillFolderHash": "92fcada390826a9e3d5083bb143803c01cea1a4b",
+      "installedAt": "2026-11-15T09:01:28.231Z",
+      "updatedAt": "2026-11-15T09:01:28.231Z"
+    },
+    "async-agent-background": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/async-agent-background/SKILL.md",
+      "skillFolderHash": "cb0de4badda5aefa2a077b33470de18f8388bee3",
+      "installedAt": "2026-11-15T09:01:28.232Z",
+      "updatedAt": "2026-11-15T09:01:28.232Z"
+    },
+    "building-agents": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/building-agents/SKILL.md",
+      "skillFolderHash": "06b2e6451285987ac5ffa721f3c5f0bfad7f09b8",
+      "installedAt": "2026-11-15T09:01:28.235Z",
+      "updatedAt": "2026-11-15T09:01:28.235Z"
+    },
+    "building-teams": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/building-teams/SKILL.md",
+      "skillFolderHash": "c73266cc10e50e864d09170783b6a8e930257183",
+      "installedAt": "2026-11-15T09:01:28.237Z",
+      "updatedAt": "2026-11-15T09:01:28.237Z"
+    },
+    "building-tools": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/building-tools/SKILL.md",
+      "skillFolderHash": "2bc6b52ae504f4fcb5e52be451c2a8d3dbef091d",
+      "installedAt": "2026-11-15T09:01:28.239Z",
+      "updatedAt": "2026-11-15T09:01:28.239Z"
+    },
+    "calendar-scheduling-tool": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/calendar-scheduling-tool/SKILL.md",
+      "skillFolderHash": "243001872e5e98099ef5b04775767af37867e0db",
+      "installedAt": "2026-11-15T09:01:28.241Z",
+      "updatedAt": "2026-11-15T09:01:28.241Z"
+    },
+    "callback-tracing-handler": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/callback-tracing-handler/SKILL.md",
+      "skillFolderHash": "4afe4fd4244efe51b6fca44af624732831765db7",
+      "installedAt": "2026-11-15T09:01:28.242Z",
+      "updatedAt": "2026-11-15T09:01:28.242Z"
+    },
+    "chain-of-thought-prompting": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/chain-of-thought-prompting/SKILL.md",
+      "skillFolderHash": "4baa1715c664b5103b8fc0000903b83011ba806d",
+      "installedAt": "2026-11-15T09:01:28.244Z",
+      "updatedAt": "2026-11-15T09:01:28.244Z"
+    },
+    "chat-model-configuration": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/chat-model-configuration/SKILL.md",
+      "skillFolderHash": "e53606680772a45cf68adf03dfb7abf308898815",
+      "installedAt": "2026-11-15T09:01:28.246Z",
+      "updatedAt": "2026-11-15T09:01:28.246Z"
+    },
+    "code-execution-sandbox": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/code-execution-sandbox/SKILL.md",
+      "skillFolderHash": "772374bb7a4b0249f4d6ae86f3082d66045121df",
+      "installedAt": "2026-11-15T09:01:28.248Z",
+      "updatedAt": "2026-11-15T09:01:28.248Z"
+    },
+    "common-agent-patterns": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/common-agent-patterns/SKILL.md",
+      "skillFolderHash": "2ff3ed1b2c55f09c25797ba0af9766288b4c4085",
+      "installedAt": "2026-11-15T09:01:28.249Z",
+      "updatedAt": "2026-11-15T09:01:28.249Z"
+    },
+    "context-window-management": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/context-window-management/SKILL.md",
+      "skillFolderHash": "83fb4045cc0fe41bbc2545c6ca6b644e12fabb74",
+      "installedAt": "2026-11-15T09:01:28.252Z",
+      "updatedAt": "2026-11-15T09:01:28.252Z"
+    },
+    "conversation-memory": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/conversation-memory/SKILL.md",
+      "skillFolderHash": "fa75b3a7c5e2243790f09ec3a3cb156017ef4683",
+      "installedAt": "2026-11-15T09:01:28.254Z",
+      "updatedAt": "2026-11-15T09:01:28.254Z"
+    },
+    "conversation-state-db": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/conversation-state-db/SKILL.md",
+      "skillFolderHash": "58b83aafa678a1315de3e82cc0c30a3b828f91d5",
+      "installedAt": "2026-11-15T09:01:28.255Z",
+      "updatedAt": "2026-11-15T09:01:28.255Z"
+    },
+    "database-query-tool": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/database-query-tool/SKILL.md",
+      "skillFolderHash": "ef9955bd1b0eef7ba2cf35606d213d67e1f0643b",
+      "installedAt": "2026-11-15T09:01:28.257Z",
+      "updatedAt": "2026-11-15T09:01:28.257Z"
+    },
+    "document-loaders": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/document-loaders/SKILL.md",
+      "skillFolderHash": "913406b2e9e47ba54a077e4b6c941c56779b01a0",
+      "installedAt": "2026-11-15T09:01:28.259Z",
+      "updatedAt": "2026-11-15T09:01:28.259Z"
+    },
+    "document-reranking": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/document-reranking/SKILL.md",
+      "skillFolderHash": "d126421fd4092f98207b2c57349aeede869dda34",
+      "installedAt": "2026-11-15T09:01:28.261Z",
+      "updatedAt": "2026-11-15T09:01:28.261Z"
+    },
+    "email-notification-tool": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/email-notification-tool/SKILL.md",
+      "skillFolderHash": "11532d49d7558da9ecca5515c8ac4eda34066a60",
+      "installedAt": "2026-11-15T09:01:28.262Z",
+      "updatedAt": "2026-11-15T09:01:28.262Z"
+    },
+    "embedding-model-ingestion": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/embedding-model-ingestion/SKILL.md",
+      "skillFolderHash": "12a2bfcab16dd402bce942a691cc26b37a6cca5c",
+      "installedAt": "2026-11-15T09:01:28.264Z",
+      "updatedAt": "2026-11-15T09:01:28.264Z"
+    },
+    "fallback-model-chain": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/fallback-model-chain/SKILL.md",
+      "skillFolderHash": "a93bee34a50bf8467b8bc7ad7999eda18333da95",
+      "installedAt": "2026-11-15T09:01:28.266Z",
+      "updatedAt": "2026-11-15T09:01:28.266Z"
+    },
+    "few-shot-injection": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/few-shot-injection/SKILL.md",
+      "skillFolderHash": "2e986b80edbb6b72b4f5e96bdebc13e84e212759",
+      "installedAt": "2026-11-15T09:01:28.268Z",
+      "updatedAt": "2026-11-15T09:01:28.268Z"
+    },
+    "filesystem-tool": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/filesystem-tool/SKILL.md",
+      "skillFolderHash": "7660746f45dcec09242208039aadb680be44c216",
+      "installedAt": "2026-11-15T09:01:28.270Z",
+      "updatedAt": "2026-11-15T09:01:28.270Z"
+    },
+    "human-in-the-loop": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/human-in-the-loop/SKILL.md",
+      "skillFolderHash": "cf7b4fcb2af5e4d670981ff792c2fe5e0ada17d2",
+      "installedAt": "2026-11-15T09:01:28.272Z",
+      "updatedAt": "2026-11-15T09:01:28.272Z"
+    },
+    "hybrid-search": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/hybrid-search/SKILL.md",
+      "skillFolderHash": "b2005b7dcc127a67b996e7fa871ac44af414dad3",
+      "installedAt": "2026-11-15T09:01:28.274Z",
+      "updatedAt": "2026-11-15T09:01:28.274Z"
+    },
+    "inspecting-streams": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/inspecting-streams/SKILL.md",
+      "skillFolderHash": "d5a928105aa2e0d9234b33a1bd1367cc9edb9c4a",
+      "installedAt": "2026-11-15T09:01:28.275Z",
+      "updatedAt": "2026-11-15T09:01:28.275Z"
+    },
+    "integrating-with-lauren": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/integrating-with-lauren/SKILL.md",
+      "skillFolderHash": "1eabeaf0fe82508a51bd6bca4cd2b0bd68f44d61",
+      "installedAt": "2026-11-15T09:01:28.277Z",
+      "updatedAt": "2026-11-15T09:01:28.277Z"
+    },
+    "json-schema-enforcement": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/json-schema-enforcement/SKILL.md",
+      "skillFolderHash": "72c000f8b32559e278059ccc876b5922bf43f3e3",
+      "installedAt": "2026-11-15T09:01:28.279Z",
+      "updatedAt": "2026-11-15T09:01:28.279Z"
+    },
+    "llm-provider-connection": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/llm-provider-connection/SKILL.md",
+      "skillFolderHash": "150d5072a32a4d2dbdfc58e88a63549182bf178f",
+      "installedAt": "2026-11-15T09:01:28.280Z",
+      "updatedAt": "2026-11-15T09:01:28.280Z"
+    },
+    "llm-rate-limiting": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/llm-rate-limiting/SKILL.md",
+      "skillFolderHash": "00aec9fb0206dbb5fe3629e192faf5ee6e5585ed",
+      "installedAt": "2026-11-15T09:01:28.282Z",
+      "updatedAt": "2026-11-15T09:01:28.282Z"
+    },
+    "long-term-vector-memory": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/long-term-vector-memory/SKILL.md",
+      "skillFolderHash": "a90a61788a5760d382e1b4c1be61f3279666fe0a",
+      "installedAt": "2026-11-15T09:01:28.284Z",
+      "updatedAt": "2026-11-15T09:01:28.284Z"
+    },
+    "managing-memory": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/managing-memory/SKILL.md",
+      "skillFolderHash": "c7939fa73d64edb6cb185d6c490cff6ac3bd0434",
+      "installedAt": "2026-11-15T09:01:28.286Z",
+      "updatedAt": "2026-11-15T09:01:28.286Z"
+    },
+    "migrating-to-lauren-ai": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/migrating-to-lauren-ai/SKILL.md",
+      "skillFolderHash": "db2fd6e5cda90727ddbf661a4b1211c74ec21d0f",
+      "installedAt": "2026-11-15T09:01:28.288Z",
+      "updatedAt": "2026-11-15T09:01:28.288Z"
+    },
+    "multi-agent-delegation": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/multi-agent-delegation/SKILL.md",
+      "skillFolderHash": "d56e0ec23c7f574b2e1a8d6c1c5b7aef22966854",
+      "installedAt": "2026-11-15T09:01:28.290Z",
+      "updatedAt": "2026-11-15T09:01:28.290Z"
+    },
+    "multi-tool-orchestration": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/multi-tool-orchestration/SKILL.md",
+      "skillFolderHash": "b6b0b77e0464d9a00c5baa1b6a3ea6cb74c9ae9a",
+      "installedAt": "2026-11-15T09:01:28.291Z",
+      "updatedAt": "2026-11-15T09:01:28.291Z"
+    },
+    "multi-turn-tool-state": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/multi-turn-tool-state/SKILL.md",
+      "skillFolderHash": "86c8a4c2de1018bb24eb01463020c35fab7b4137",
+      "installedAt": "2026-11-15T09:01:28.293Z",
+      "updatedAt": "2026-11-15T09:01:28.293Z"
+    },
+    "output-guardrails": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/output-guardrails/SKILL.md",
+      "skillFolderHash": "2653eede67a6f7f6f2ec3cf63a34c80b822ac67c",
+      "installedAt": "2026-11-15T09:01:28.295Z",
+      "updatedAt": "2026-11-15T09:01:28.295Z"
+    },
+    "plan-and-execute-agent": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/plan-and-execute-agent/SKILL.md",
+      "skillFolderHash": "e89a5021b879b1e6bf8dc96ea688dc4dec69e5f0",
+      "installedAt": "2026-11-15T09:01:28.297Z",
+      "updatedAt": "2026-11-15T09:01:28.297Z"
+    },
+    "prompt-injection-defense": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/prompt-injection-defense/SKILL.md",
+      "skillFolderHash": "9696cabca6703dfad0c0042ec73f531d2e12556e",
+      "installedAt": "2026-11-15T09:01:28.299Z",
+      "updatedAt": "2026-11-15T09:01:28.299Z"
+    },
+    "prompt-versioning": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/prompt-versioning/SKILL.md",
+      "skillFolderHash": "d65546fb2ea62d6128d74edf9ad9a29df35fb724",
+      "installedAt": "2026-11-15T09:01:28.301Z",
+      "updatedAt": "2026-11-15T09:01:28.301Z"
+    },
+    "rag-pipeline": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/rag-pipeline/SKILL.md",
+      "skillFolderHash": "dc1723587005039b492705f6b8b90b89980b66ae",
+      "installedAt": "2026-11-15T09:01:28.303Z",
+      "updatedAt": "2026-11-15T09:01:28.303Z"
+    },
+    "react-agent-loop": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/react-agent-loop/SKILL.md",
+      "skillFolderHash": "6a682cc13aefe72cf6ecb8fa3c9f52447720aee2",
+      "installedAt": "2026-11-15T09:01:28.305Z",
+      "updatedAt": "2026-11-15T09:01:28.305Z"
+    },
+    "response-validation-retry": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/response-validation-retry/SKILL.md",
+      "skillFolderHash": "68e0409aaac8dcd063fb0c07ff14d948e01c9469",
+      "installedAt": "2026-11-15T09:01:28.306Z",
+      "updatedAt": "2026-11-15T09:01:28.306Z"
+    },
+    "rest-api-tool": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/rest-api-tool/SKILL.md",
+      "skillFolderHash": "4f301aace28ea86a33fd7d2beadb1433b9cb76d5",
+      "installedAt": "2026-11-15T09:01:28.308Z",
+      "updatedAt": "2026-11-15T09:01:28.308Z"
+    },
+    "securing-agents": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/securing-agents/SKILL.md",
+      "skillFolderHash": "c1011b9584e0b138c498caa625d8dd9d65a2e704",
+      "installedAt": "2026-11-15T09:01:28.310Z",
+      "updatedAt": "2026-11-15T09:01:28.310Z"
+    },
+    "semantic-cache": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/semantic-cache/SKILL.md",
+      "skillFolderHash": "7918bdc523c7102a93204eb02c3b084cd2de706e",
+      "installedAt": "2026-11-15T09:01:28.312Z",
+      "updatedAt": "2026-11-15T09:01:28.312Z"
+    },
+    "streaming-response-handler": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/streaming-response-handler/SKILL.md",
+      "skillFolderHash": "c0fdadcc536c1110c04aaa4b198ad34e6b70b122",
+      "installedAt": "2026-11-15T09:01:28.314Z",
+      "updatedAt": "2026-11-15T09:01:28.314Z"
+    },
+    "structured-output-parsing": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/structured-output-parsing/SKILL.md",
+      "skillFolderHash": "31dbfcf804865f72d4dd6a049320ca302ea2885b",
+      "installedAt": "2026-11-15T09:01:28.316Z",
+      "updatedAt": "2026-11-15T09:01:28.316Z"
+    },
+    "sub-agent-spawning": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/sub-agent-spawning/SKILL.md",
+      "skillFolderHash": "0a911ac99b14c694becca5f260742f5b56e71348",
+      "installedAt": "2026-11-15T09:01:28.318Z",
+      "updatedAt": "2026-11-15T09:01:28.318Z"
+    },
+    "system-prompt-templating": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/system-prompt-templating/SKILL.md",
+      "skillFolderHash": "d5fcb2ef5018141bde0f2675e0cd62b9b549ba14",
+      "installedAt": "2026-11-15T09:01:28.320Z",
+      "updatedAt": "2026-11-15T09:01:28.320Z"
+    },
+    "testing-agents": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/testing-agents/SKILL.md",
+      "skillFolderHash": "5d08713b9077a484aee5de508058fcb8b0d751fe",
+      "installedAt": "2026-11-15T09:01:28.322Z",
+      "updatedAt": "2026-11-15T09:01:28.322Z"
+    },
+    "text-splitting": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/text-splitting/SKILL.md",
+      "skillFolderHash": "d3d876ee803b7aa6196935f934c1de20f90e3637",
+      "installedAt": "2026-11-15T09:01:28.323Z",
+      "updatedAt": "2026-11-15T09:01:28.323Z"
+    },
+    "token-usage-budget": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/token-usage-budget/SKILL.md",
+      "skillFolderHash": "df140889bab72e629d9af109df6058cd9af19c31",
+      "installedAt": "2026-11-15T09:01:28.325Z",
+      "updatedAt": "2026-11-15T09:01:28.325Z"
+    },
+    "tool-function-calling": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/tool-function-calling/SKILL.md",
+      "skillFolderHash": "94288d4fa7ce1e6702be34449ed58baf29e710f4",
+      "installedAt": "2026-11-15T09:01:28.327Z",
+      "updatedAt": "2026-11-15T09:01:28.327Z"
+    },
+    "vector-store-integration": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/vector-store-integration/SKILL.md",
+      "skillFolderHash": "9135a4f990ce3070b885590121f34ff895d14c15",
+      "installedAt": "2026-11-15T09:01:28.329Z",
+      "updatedAt": "2026-11-15T09:01:28.329Z"
+    },
+    "web-search-tool": {
+      "source": "lauren-framework/lauren-ai",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/lauren-framework/lauren-ai.git",
+      "skillPath": "skills/web-search-tool/SKILL.md",
+      "skillFolderHash": "65f8a780ff36ead4da573cac09d17909da877bc3",
+      "installedAt": "2026-11-15T09:01:28.331Z",
+      "updatedAt": "2026-11-15T09:01:28.331Z"
     }
   },
   "dismissed": {

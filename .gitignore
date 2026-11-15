@@ -9,3 +9,11 @@ reports/*.tmp
 node_modules/
 skills/*/node_modules/
 skills/*/.git/
+
+# Ruflo local secrets and runtime data
+.env
+.env.local
+.env.*.local
+.claude-flow/data/
+.claude-flow/logs/
+.claude-flow/sessions/

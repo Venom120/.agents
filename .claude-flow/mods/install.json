@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "installedAt": "2026-11-15T09:13:04.291Z",
+  "files": {
+    "C:\\Users\\yatha\\.agents\\.claude\\settings.json": {
+      "plugins": [
+        "ruflo-mods@ruflo",
+        "ruflo-swarm@ruflo",
+        "ruflo-console@ruflo"
+      ],
+      "marketplace": true,
+      "env": true,
+      "claudeInstalled": [
+        "ruflo-mods@ruflo",
+        "ruflo-swarm@ruflo",
+        "ruflo-console@ruflo"
+      ]
+    }
+  }
+}
