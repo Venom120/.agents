@@ -1,0 +1,2 @@
+{"v":1,"endedAt":1795261142522,"reason":"other","totalUsd":0.719926,"byAgent":{"main":0.719926},"byTool":{"(model)":0.460808,"Bash":0.236613,"mcp__ccd_turn__wrap_up":0.022505},"refusals":0,"budget":null}
+{"v":1,"endedAt":1795270876858,"reason":"other","totalUsd":1.55279,"byAgent":{"main":1.55279},"byTool":{"(model)":1.25924,"Bash":0.264519,"AskUserQuestion":0.029032},"refusals":0,"budget":null}

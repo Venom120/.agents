@@ -1339,6 +1339,26 @@
       "pluginName": "hallmark",
       "installedAt": "2026-11-15T19:02:59.470Z",
       "updatedAt": "2026-11-15T19:02:59.470Z"
+    },
+    "open-code-review": {
+      "source": "alibaba/open-code-review",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alibaba/open-code-review.git",
+      "commit": "39515dca6161fb7fd176d87704b2b10e5f7a0c36",
+      "skillPath": "skills/open-code-review/SKILL.md",
+      "skillFolderHash": "182e5348bde6fcc19217669023e5213e3b30a683",
+      "installedAt": "2026-11-21T19:57:41.753Z",
+      "updatedAt": "2026-11-21T19:57:41.753Z"
+    },
+    "open-code-review-delegate": {
+      "source": "alibaba/open-code-review",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/alibaba/open-code-review.git",
+      "commit": "39515dca6161fb7fd176d87704b2b10e5f7a0c36",
+      "skillPath": "skills/open-code-review-delegate/SKILL.md",
+      "skillFolderHash": "9511b6fca78fb1e983cd849f6da6ff55caf670d7",
+      "installedAt": "2026-11-21T19:57:41.756Z",
+      "updatedAt": "2026-11-21T19:57:41.756Z"
     }
   },
   "dismissed": {

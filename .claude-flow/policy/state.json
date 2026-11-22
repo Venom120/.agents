@@ -45,10 +45,50 @@
         "policyHash": "sha256:00b63b2f746eb8b9095bbd5e1dbae4ddd74fd92a6740b72f59f4069fbfda4737"
       },
       "hash": "sha256:5a1bfdc910a8ffb5f01aa8eb85ee16410bb9157ed665261daf901fd3032f4223"
+    },
+    {
+      "payload": {
+        "receiptId": "sha256:3609f05813bcac4826d6d1b758249fe28743d80c9da13c107c7f1c20f8cce526",
+        "previousReceiptHash": "sha256:5a1bfdc910a8ffb5f01aa8eb85ee16410bb9157ed665261daf901fd3032f4223",
+        "sequence": 1,
+        "issuedAt": 1795261146681,
+        "request": {
+          "identity": {
+            "id": "legacy-cli",
+            "type": "legacy"
+          },
+          "action": {
+            "type": "mcp.tool.call",
+            "resource": "hooks_intelligence_verified-ingest",
+            "tool": "hooks_intelligence_verified-ingest",
+            "server": "ruflo",
+            "network": false,
+            "destructive": false
+          },
+          "context": {
+            "metadata": {
+              "inputDigest": "sha256:b72ed13cb525af2592de7b88e763277fa14592edc468666510c59a8cf02dd505"
+            },
+            "now": 1795261146681
+          },
+          "requestId": "5fad6907-4956-4cee-941a-e655ab79066e"
+        },
+        "decision": {
+          "requestId": "5fad6907-4956-4cee-941a-e655ab79066e",
+          "outcome": "allowed",
+          "enforcedOutcome": "allowed",
+          "mode": "legacy",
+          "reason": "legacy-default-allow",
+          "matchedRules": [],
+          "obligations": []
+        },
+        "policyHash": "sha256:00b63b2f746eb8b9095bbd5e1dbae4ddd74fd92a6740b72f59f4069fbfda4737"
+      },
+      "hash": "sha256:1dfd1c0536680ed8580a00ffc2f897058ff65547e94a7e7d0e4c577cd6cab782"
     }
   ],
   "migratedAt": 1794734359567,
   "migratedFrom": "pre-ADR-324; capabilities=.swarm/memory.db",
-  "ledgerHead": "sha256:5a1bfdc910a8ffb5f01aa8eb85ee16410bb9157ed665261daf901fd3032f4223",
-  "ledgerLength": 1
+  "ledgerLength": 2,
+  "ledgerHead": "sha256:1dfd1c0536680ed8580a00ffc2f897058ff65547e94a7e7d0e4c577cd6cab782"
 }

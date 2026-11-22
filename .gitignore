@@ -17,3 +17,5 @@ skills/*/.git/
 .claude-flow/data/
 .claude-flow/logs/
 .claude-flow/sessions/
+.swarm
+.serena
