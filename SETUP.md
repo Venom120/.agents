@@ -25,7 +25,30 @@ check broken links and duplicates
 restart selected desktop agents
 ```
 
-## 1. Discover and ask
+## 1. Clone or update the complete checkout
+
+After cloning, initialize and pull every Git submodule before discovering or
+syncing harnesses:
+
+```powershell
+git submodule sync --recursive
+git submodule update --init --recursive
+```
+
+For an existing checkout, update the parent repository and its submodules
+together:
+
+```powershell
+git pull --recurse-submodules
+git submodule sync --recursive
+git submodule update --init --recursive
+```
+
+Run these commands on `local`. The agent must not switch to `main` for normal
+work; use the documented `cp` flow only when the user explicitly asks to
+commit and push.
+
+## 2. Discover and ask
 
 Run this read-only discovery from the repository root:
 
@@ -49,7 +72,7 @@ future adapter is documented here.
 Ask the user which detected supported harnesses to configure. Do not infer
 consent from detection alone. Example answer: `claude,codex,antigravity`.
 
-## 2. Sync after confirmation
+## 3. Sync after confirmation
 
 Run the approved selection:
 
@@ -74,7 +97,7 @@ A Claude mod is not a skill. Its `.claude-plugin/plugin.json` and any
 does not activate Claude hooks. Restart the affected desktop agents after a
 successful sync.
 
-## 3. Verify and keep the index current
+## 4. Verify and keep the index current
 
 The apply pipeline runs the read-only inventory and regenerates [INDEX.md](INDEX.md).
 The index is the checklist of every source skill and tracked mod. After adding
@@ -100,7 +123,7 @@ If the repository was updated with Git, pull first, then repeat this sync. The
 laptop agent can be asked either to read this file from the checkout or to
 receive the file as an attachment.
 
-## 4. Source and branch safety
+## 5. Source and branch safety
 
 Keep the checkout at `~/.agents`. The `local` branch is private and is never
 pushed; `main` is the sanitized public branch. A laptop sync may read and link
