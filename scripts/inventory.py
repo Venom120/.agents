@@ -57,6 +57,13 @@ HARNESS_HOMES = {
 REPARSE = 0x400
 
 
+def exists(path: Path) -> bool:
+    try:
+        return path.exists()
+    except OSError:
+        return False
+
+
 def is_link(p: Path) -> bool:
     try:
         st = os.lstat(p)
@@ -125,7 +132,7 @@ def scan_skills(harnesses: list[str], extra: list[tuple[str, Path]]) -> list[dic
     items = []
     dirs = [(h, SKILL_DIRS[h]) for h in harnesses if h in SKILL_DIRS] + extra
     for harness, base in dirs:
-        if not base.exists():
+        if not exists(base):
             continue
         # a whole-folder junction (Antigravity) is one entry, not a copy
         whole = is_link(base)
@@ -158,7 +165,7 @@ def scan_skills(harnesses: list[str], extra: list[tuple[str, Path]]) -> list[dic
 def scan_md_dir(dirs: dict, harnesses: list[str], extra: list[tuple[str, Path]], suffixes=(".md",)) -> list[dict]:
     items = []
     for harness, base in [(h, dirs[h]) for h in harnesses if h in dirs] + extra:
-        if not base.exists():
+        if not exists(base):
             continue
         whole = is_link(base) and harness != "agents"
         for p in sorted(base.rglob("*")):
@@ -189,7 +196,7 @@ def mcp_servers(project: Path | None) -> list[dict]:
     for n, v in (load_json(mj, {}).get("mcpServers") or {}).items():
         add(str(mj), n, v.get("type") or "stdio", v.get("command") or v.get("url"), "project")
     toml = HOME / ".codex" / "config.toml"
-    if toml.exists():
+    if exists(toml):
         for m in re.finditer(r"^\[mcp_servers\.([A-Za-z0-9_-]+)\]\s*$", toml.read_text(encoding="utf-8", errors="replace"), re.M):
             add("~/.codex/config.toml", m.group(1), "stdio")
     for src, path in (("~/.gemini/config/mcp_config.json", HOME / ".gemini" / "config" / "mcp_config.json"),
@@ -197,7 +204,7 @@ def mcp_servers(project: Path | None) -> list[dict]:
         for n, v in (load_json(path, {}).get("mcpServers") or {}).items():
             add(src, n, v.get("type") or "stdio", v.get("command"))
     oc = HOME / ".config" / "opencode" / "opencode.jsonc"
-    if oc.exists():
+    if exists(oc):
         txt = oc.read_text(encoding="utf-8", errors="replace")
         m = re.search(r'"mcp"\s*:\s*\{', txt)
         if m:
@@ -233,12 +240,12 @@ def plugins() -> list[dict]:
     for k, v in (ip.get("plugins", ip)).items():
         v0 = v[0] if isinstance(v, list) else v
         root = Path(v0.get("installPath", ""))
-        count = lambda pat: len(list(root.glob(pat))) if root.exists() else 0
+        count = lambda pat: len(list(root.glob(pat))) if exists(root) else 0
         out.append({"name": k, "harness": "claude", "version": v0.get("version"), "enabled": enabled.get(k),
                     "skills": count("skills/*/SKILL.md"), "commands": count("commands/**/*.md"),
-                    "agents": count("agents/*.md"), "hooks": (root / "hooks" / "hooks.json").exists()})
+                    "agents": count("agents/*.md"), "hooks": exists(root / "hooks" / "hooks.json")})
     toml = HOME / ".codex" / "config.toml"
-    if toml.exists():
+    if exists(toml):
         for m in re.finditer(r'^\[plugins\."([^"]+)"\]', toml.read_text(encoding="utf-8", errors="replace"), re.M):
             out.append({"name": m.group(1), "harness": "codex"})
     return out
@@ -307,7 +314,7 @@ def main() -> int:
         extra_c = [("project", p / ".claude" / "commands")]
         extra_a = [("project", p / ".claude" / "agents")]
     inv = {"generated": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"), "target": t}
-    inv["harnesses"] = {h: p.exists() for h, p in HARNESS_HOMES.items()}
+    inv["harnesses"] = {h: exists(p) for h, p in HARNESS_HOMES.items()}
     if "skills" in want_cats:
         inv["skills"] = scan_skills(hs, extra_s)
         inv["duplicates"] = duplicates(inv["skills"])

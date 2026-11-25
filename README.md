@@ -3,6 +3,10 @@
 This repository is the local source of truth for reusable agent skills, commands,
 scripts, and harness adapters.
 
+Start with [SETUP.md](SETUP.md) when installing this orchestration on a user's
+laptop. It discovers installed harnesses, asks which supported harnesses to
+configure, runs the sync pipeline, and refreshes [INDEX.md](INDEX.md).
+
 ## Local setup
 
 Place the repository at `~/.agents` so supported harnesses can discover the
@@ -36,6 +40,69 @@ mklink /J "%USERPROFILE%\.claude\skills\%SKILL%" "%USERPROFILE%\.agents\skills\%
 The target link must not already exist. To remove only the link while keeping
 the skill source, use `rmdir "%USERPROFILE%\.claude\skills\%SKILL%"` in
 Command Prompt or `Remove-Item $target` in PowerShell.
+
+## Desktop-agent plugins, skills, and Claude mods
+
+Skills and Claude mods use different discovery paths. A skill is a directory
+containing `SKILL.md`; a Claude mod is a plugin module containing a
+`.claude-plugin\plugin.json` and, when applicable, a `hooks\hooks.json`.
+Linking a skill does not activate a Claude mod's hooks.
+
+### Install a plugin repository and expose all skills
+
+Keep the external checkout under `.agents` and keep it ignored by the parent
+repository. For example, the Elephant-Goldfish Model checkout is:
+
+```text
+%USERPROFILE%\.agents\elephant-goldfish-model
+```
+
+On Windows, expose every skill from that checkout to the shared source and to
+Claude:
+
+```powershell
+$repo = Join-Path $HOME ".agents\elephant-goldfish-model"
+$shared = Join-Path $HOME ".agents\skills"
+$claude = Join-Path $HOME ".claude\skills"
+New-Item -ItemType Directory -Force -Path $shared, $claude | Out-Null
+Get-ChildItem (Join-Path $repo "skills") -Directory | ForEach-Object {
+    $source = Join-Path $shared $_.Name
+    $target = Join-Path $claude $_.Name
+    if (-not (Test-Path $source)) {
+        New-Item -ItemType Junction -Path $source -Target $_.FullName | Out-Null
+    }
+    if (-not (Test-Path $target)) {
+        New-Item -ItemType Junction -Path $target -Target $source | Out-Null
+    }
+}
+```
+
+Codex discovers the shared `.agents\skills` directories directly. Claude Code
+uses the `.claude\skills` junctions. Restart the desktop agent after adding or
+updating skills.
+
+### Install and expose Claude mods
+
+Keep each mod's canonical checkout under `.agents\mods\<mod-name>`, then link
+the complete mod directory into Claude's mod directory. Preserve the manifest
+and hook files; do not link only the hook source:
+
+```powershell
+$modName = "cache-keeper"
+$source = Join-Path $HOME ".agents\mods\$modName"
+$target = Join-Path $HOME ".claude\mods\$modName"
+New-Item -ItemType Directory -Force -Path (Split-Path $source), (Split-Path $target) | Out-Null
+if (-not (Test-Path $target)) {
+    New-Item -ItemType Junction -Path $target -Target $source
+}
+```
+
+Apply the same procedure to every directory under `.agents\mods`; do not
+assume that installing a plugin repository's skills also installs its mods.
+After linking mods, restart Claude so its mod loader registers the plugin and
+hooks. The current local Claude mod inventory includes `cache-keeper`, whose
+manifest is `.claude-plugin\plugin.json` and whose hook registration is
+`hooks\hooks.json`.
 
 Generated inventory manifests are machine-local and intentionally ignored by
 Git. Cleanup reports and other local backups are also not part of the public

@@ -134,6 +134,19 @@ Performance is a requirement: assess it for every feature and implement what is 
 
 **Harness discovery (verify when versions change):** Claude Code `~/.claude/skills` (needs one link per skill) · OpenCode `~/.config/opencode/skills`, `~/.claude/skills`, `~/.agents/skills` · Codex `~/.agents/skills` (disable per skill in `~/.codex/config.toml`) · Antigravity `~/.gemini/config/skills` (link the whole folder) and per-project `.agents/skills`. Commands live in `~/.agents/commands` and each harness commands folder is linked to it (`scripts/link-commands.sh`); agents have different native formats per harness: keep each harness's adapter, never symlink across formats. MCP configs differ per harness (JSON/TOML/JSONC) — track names only, never print env/args/headers.
 
+**Desktop-agent installation distinction:** skills live under `~/.agents/skills`
+and are linked into Claude's `~/.claude/skills`; Claude hook mods are separate
+plugin directories under `~/.agents/mods/<name>` linked into
+`~/.claude/mods/<name>`. A skill symlink does not activate a mod. A mod link
+must preserve `.claude-plugin/plugin.json` and its hook registration files,
+then Claude must be restarted. The current local mod inventory includes
+`cache-keeper`; apply the same source-and-link procedure to future mods.
+
+For a laptop installation or post-pull synchronization, the agent must read
+`SETUP.md`, discover harnesses, ask which supported harnesses to configure, and
+run `scripts/sync.py --harness <confirmed-harnesses> --apply`. The script then
+refreshes `INDEX.md` and the inventory; do not silently choose a harness.
+
 **Two slash skills:**
 - `/skill-cleanup [harness|category|project <dir>]` — audit (usage, redundancy, token overhead, health), review items in batches with pros/cons and a KEEP/MERGE/CENTRALIZE/MOVE/DISABLE/REMOVE/INVESTIGATE recommendation, execute only approved decisions, verify, write a report with rollback lines. Idempotent.
 - `/init-playbook [repo]` — analyse the repo, read the inventory, recommend only tools with a clear use here, ask, then update `CLAUDE.md`/`AGENTS.md` in place and refresh the marked tooling block.
