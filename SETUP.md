@@ -35,6 +35,10 @@ git submodule sync --recursive
 git submodule update --init --recursive
 ```
 
+The sync pipeline then detects nested `SKILL.md` files inside submodule
+repositories, copies them into real canonical `skills/<name>` directories,
+and links those canonical skills to the selected harnesses.
+
 For an existing checkout, update the parent repository and its submodules
 together:
 

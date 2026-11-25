@@ -1,0 +1,32 @@
+{
+  "name": "cache-keeper",
+  "version": "0.1.0",
+  "description": "Prompt-cache countdown, context and limit pills above the prompt, with keep-warm, compact, handoff and auto-compact controls.",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "cacheTtlMinutes": {
+      "type": "number",
+      "title": "Prompt-cache TTL (minutes)",
+      "description": "0 = automatic: 60 on a subscription, 5 otherwise.",
+      "default": 0
+    },
+    "warnMinutes": {
+      "type": "number",
+      "title": "Cold-cache warning (minutes before)",
+      "description": "Toast this many minutes before the cache goes cold (capped at half the TTL).",
+      "default": 5
+    },
+    "inputPricePerMTok": {
+      "type": "number",
+      "title": "Input price (USD per million tokens)",
+      "description": "Base input price of your model; re-warming is priced from it (x1.25 for 5-minute, x2 for 1-hour cache writes).",
+      "default": 5
+    },
+    "autoCompactTokens": {
+      "type": "number",
+      "title": "Auto-compact point (tokens)",
+      "description": "0 = automatic: 300k on 1M-context models, else 70% of the window. Never below 100k.",
+      "default": 0
+    }
+  }
+}

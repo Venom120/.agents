@@ -13,11 +13,12 @@ adding a skill, command, or mod so the laptop agent can see the current set.
 - [ ] Run `scripts/inventory.py` and inspect broken links or duplicates.
 - [ ] Restart the selected desktop agents.
 
-## Skills (244)
+## Skills (246)
 
 - [ ] `adding-guardrails` — `skills\adding-guardrails`
 - [ ] `agent-health-timeout` — `skills\agent-health-timeout`
 - [ ] `agent-permission-scoping` — `skills\agent-permission-scoping`
+- [ ] `agent-reach-skill` — `skills\agent-reach-skill`
 - [ ] `agent-session-isolation` — `skills\agent-session-isolation`
 - [ ] `agent-step-logging` — `skills\agent-step-logging`
 - [ ] `agent-supervisor-router` — `skills\agent-supervisor-router`
@@ -133,6 +134,7 @@ adding a skill, command, or mod so the laptop agent can see the current set.
 - [ ] `integrating-with-lauren` — `skills\integrating-with-lauren`
 - [ ] `jd-match` — `skills\jd-match`
 - [ ] `json-schema-enforcement` — `skills\json-schema-enforcement`
+- [ ] `karpathy-guidelines` — `skills\karpathy-guidelines`
 - [ ] `level-design` — `skills\level-design`
 - [ ] `li-audit` — `skills\li-audit`
 - [ ] `li-carousel` — `skills\li-carousel`
@@ -260,12 +262,12 @@ adding a skill, command, or mod so the laptop agent can see the current set.
 - [ ] `yt-shorts` — `skills\yt-shorts`
 - [ ] `yt-viral` — `skills\yt-viral`
 
-## Claude mods (0)
+## Claude mods (1)
 
-- [ ] No tracked Claude mods. Add a complete mod under `mods/<name>` to distribute it.
+- [ ] `cache-keeper` — `mods\cache-keeper`
 
 ## Source directories
 
-- Skills: real directories at `skills/<name>/SKILL.md` (no links in `skills/`)
+- Skills: `skills/<name>/SKILL.md`
 - Commands: `commands/`
-- Mods: real directories at `mods/<name>/.claude-plugin/plugin.json` plus hook files when needed
+- Mods: `mods/<name>/.claude-plugin/plugin.json` plus hook files when needed

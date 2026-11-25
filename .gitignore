@@ -9,6 +9,9 @@ reports/*.tmp
 node_modules/
 skills/*/node_modules/
 skills/*/.git/
+# Generated canonical copies extracted from nested skill submodules by sync.py
+skills/agent-reach-skill/
+skills/karpathy-guidelines/
 
 # Ruflo local secrets and runtime data
 .env

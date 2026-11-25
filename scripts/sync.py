@@ -9,6 +9,8 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -26,11 +28,16 @@ HARNESS_HOMES = {
     "kiro": HOME / ".kiro",
 }
 SUPPORTED = {"claude", "opencode", "codex", "antigravity"}
+REPARSE_POINT = 0x400
 
 
 def is_link(path: Path) -> bool:
     is_junction = getattr(path, "is_junction", lambda: False)
-    return path.is_symlink() or is_junction()
+    try:
+        attributes = getattr(os.lstat(path), "st_file_attributes", 0)
+    except OSError:
+        attributes = 0
+    return path.is_symlink() or is_junction() or bool(attributes & REPARSE_POINT)
 
 
 def discover() -> dict[str, bool]:
@@ -53,24 +60,85 @@ def link_directory(source: Path, target: Path, label: str, apply: bool) -> str:
                     return f"OK {label}: already linked"
             except OSError:
                 pass
-        return f"SKIP {label}: target exists and is not this link ({target})"
+            if not apply:
+                return f"PLAN {label}: retarget {target} -> {source}"
+            if os.name == "nt":
+                subprocess.run(["cmd", "/c", "rmdir", str(target)], check=True, stdout=subprocess.DEVNULL)
+            else:
+                target.unlink()
+        else:
+            return f"SKIP {label}: target exists and is not this link ({target})"
     if not apply:
         return f"PLAN {label}: {target} -> {source}"
     target.parent.mkdir(parents=True, exist_ok=True)
-    if os.name == "nt":
-        subprocess.run(
-            ["cmd", "/c", "mklink", "/J", str(target), str(source)],
-            check=True,
-            stdout=subprocess.DEVNULL,
-        )
-    else:
-        target.symlink_to(source, target_is_directory=True)
+    try:
+        if os.name == "nt":
+            target_arg = str(target).replace("'", "''")
+            source_arg = str(source).replace("'", "''")
+            subprocess.run(
+                [
+                    "powershell",
+                    "-NoProfile",
+                    "-Command",
+                    f"New-Item -ItemType Junction -Path '{target_arg}' -Target '{source_arg}' | Out-Null",
+                ],
+                check=True,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+        else:
+            target.symlink_to(source, target_is_directory=True)
+    except (OSError, subprocess.CalledProcessError) as exc:
+        return f"MANUAL {label}: create link {target} -> {source} ({exc})"
     return f"LINK {label}: {target} -> {source}"
 
 
 def source_skills() -> list[Path]:
     base = ROOT / "skills"
     return sorted(p for p in base.iterdir() if p.is_dir() and (p / "SKILL.md").exists()) if base.exists() else []
+
+
+def nested_skill_sources() -> list[tuple[str, Path]]:
+    """Find SKILL.md files nested inside repository or Git submodule wrappers."""
+    base = ROOT / "skills"
+    found: list[tuple[str, Path]] = []
+    if not base.exists():
+        return found
+    for wrapper in sorted(p for p in base.iterdir() if p.is_dir() and not is_link(p)):
+        if (wrapper / "SKILL.md").exists():
+            continue
+        for skill_file in wrapper.rglob("SKILL.md"):
+            if any(part in {".git", "node_modules", "__pycache__"} for part in skill_file.parts):
+                continue
+            try:
+                text = skill_file.read_text(encoding="utf-8", errors="replace")[:2000]
+            except OSError:
+                continue
+            match = re.search(r"^name:\s*([^\s]+)", text, re.MULTILINE)
+            name = match.group(1).strip("'\"") if match else skill_file.parent.name
+            found.append((name, skill_file.parent))
+    return found
+
+
+def materialize_nested_skills() -> list[str]:
+    """Copy nested repository skills into real canonical .agents/skills dirs."""
+    out: list[str] = []
+    base = ROOT / "skills"
+    for name, source in nested_skill_sources():
+        target = base / name
+        # Windows paths are case-insensitive: the Agent-Reach submodule wrapper
+        # collides with the desired `agent-reach` skill directory.
+        if target.exists() and not (target / "SKILL.md").exists():
+            target = base / f"{name}-skill"
+        if target.exists() or target.is_symlink():
+            if is_link(target):
+                out.append(f"ERROR {name}: canonical target is a link ({target})")
+            else:
+                out.append(f"OK {name}: canonical directory already exists")
+            continue
+        shutil.copytree(source, target)
+        out.append(f"COPY {name}: {source} -> {target}")
+    return out
 
 
 def source_mods() -> list[Path]:
@@ -153,9 +221,14 @@ def main() -> int:
     found = discover()
     print(json.dumps({"detected": found, "supported": sorted(SUPPORTED)}, indent=2))
     if args.refresh_index:
+        for line in materialize_nested_skills():
+            print(line)
         refresh_index()
         print("Refreshed INDEX.md.")
         return 0
+    if args.apply:
+        for line in materialize_nested_skills():
+            print(line)
     issues = canonical_link_issues()
     if issues:
         print("ERROR: canonical .agents sources must be real directories; links found:", file=sys.stderr)

@@ -140,6 +140,10 @@ def scan_skills(harnesses: list[str], extra: list[tuple[str, Path]]) -> list[dic
             if not entry.is_dir():
                 continue
             skill_md = entry / "SKILL.md"
+            # Repository/submodule wrappers can contain a real nested skill;
+            # they are source containers, not broken harness skills.
+            if not skill_md.exists() and any(p.name == "SKILL.md" for p in entry.rglob("SKILL.md")):
+                continue
             fm = frontmatter(skill_md) if skill_md.exists() else {}
             linked = is_link(entry)
             name = entry.name
