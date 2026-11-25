@@ -78,6 +78,15 @@ def source_mods() -> list[Path]:
     return sorted(p for p in base.iterdir() if p.is_dir()) if base.exists() else []
 
 
+def canonical_link_issues() -> list[Path]:
+    issues: list[Path] = []
+    for base in (ROOT / "skills", ROOT / "mods"):
+        if not base.exists():
+            continue
+        issues.extend(p for p in base.iterdir() if p.is_dir() and is_link(p))
+    return sorted(issues)
+
+
 def sync_harness(name: str, apply: bool) -> list[str]:
     shared_skills = ROOT / "skills"
     shared_commands = ROOT / "commands"
@@ -147,6 +156,12 @@ def main() -> int:
         refresh_index()
         print("Refreshed INDEX.md.")
         return 0
+    issues = canonical_link_issues()
+    if issues:
+        print("ERROR: canonical .agents sources must be real directories; links found:", file=sys.stderr)
+        for issue in issues:
+            print(f"- {issue}", file=sys.stderr)
+        return 2
     selected = [h.strip().lower() for h in args.harness.split(",")] if args.harness else []
     if not selected:
         print("Ask the user which detected supported harnesses to configure, then rerun with --harness ... --apply.")

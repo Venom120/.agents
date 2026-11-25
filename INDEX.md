@@ -266,6 +266,6 @@ adding a skill, command, or mod so the laptop agent can see the current set.
 
 ## Source directories
 
-- Skills: `skills/<name>/SKILL.md`
+- Skills: real directories at `skills/<name>/SKILL.md` (no links in `skills/`)
 - Commands: `commands/`
-- Mods: `mods/<name>/.claude-plugin/plugin.json` plus hook files when needed
+- Mods: real directories at `mods/<name>/.claude-plugin/plugin.json` plus hook files when needed

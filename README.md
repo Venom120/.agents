@@ -51,14 +51,16 @@ Linking a skill does not activate a Claude mod's hooks.
 ### Install a plugin repository and expose all skills
 
 Keep the external checkout under `.agents` and keep it ignored by the parent
-repository. For example, the Elephant-Goldfish Model checkout is:
+repository. Copy its skills into the real canonical `.agents\skills` directory;
+never create a junction or symlink inside `.agents\skills`. For example, the
+Elephant-Goldfish Model checkout is:
 
 ```text
 %USERPROFILE%\.agents\elephant-goldfish-model
 ```
 
-On Windows, expose every skill from that checkout to the shared source and to
-Claude:
+On Windows, install each new skill as a real directory in the shared source,
+then link that canonical directory to Claude:
 
 ```powershell
 $repo = Join-Path $HOME ".agents\elephant-goldfish-model"
@@ -69,7 +71,7 @@ Get-ChildItem (Join-Path $repo "skills") -Directory | ForEach-Object {
     $source = Join-Path $shared $_.Name
     $target = Join-Path $claude $_.Name
     if (-not (Test-Path $source)) {
-        New-Item -ItemType Junction -Path $source -Target $_.FullName | Out-Null
+        Copy-Item -LiteralPath $_.FullName -Destination $source -Recurse
     }
     if (-not (Test-Path $target)) {
         New-Item -ItemType Junction -Path $target -Target $source | Out-Null
@@ -77,13 +79,14 @@ Get-ChildItem (Join-Path $repo "skills") -Directory | ForEach-Object {
 }
 ```
 
-Codex discovers the shared `.agents\skills` directories directly. Claude Code
+Codex discovers the real shared `.agents\skills` directories directly. Claude Code
 uses the `.claude\skills` junctions. Restart the desktop agent after adding or
-updating skills.
+updating skills. The sync pipeline rejects links in `.agents\skills` or
+`.agents\mods` so the source remains portable and self-contained.
 
 ### Install and expose Claude mods
 
-Keep each mod's canonical checkout under `.agents\mods\<mod-name>`, then link
+Keep each mod as a real canonical directory under `.agents\mods\<mod-name>`, then link
 the complete mod directory into Claude's mod directory. Preserve the manifest
 and hook files; do not link only the hook source:
 

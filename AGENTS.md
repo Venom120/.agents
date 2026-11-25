@@ -134,13 +134,16 @@ Performance is a requirement: assess it for every feature and implement what is 
 
 **Harness discovery (verify when versions change):** Claude Code `~/.claude/skills` (needs one link per skill) · OpenCode `~/.config/opencode/skills`, `~/.claude/skills`, `~/.agents/skills` · Codex `~/.agents/skills` (disable per skill in `~/.codex/config.toml`) · Antigravity `~/.gemini/config/skills` (link the whole folder) and per-project `.agents/skills`. Commands live in `~/.agents/commands` and each harness commands folder is linked to it (`scripts/link-commands.sh`); agents have different native formats per harness: keep each harness's adapter, never symlink across formats. MCP configs differ per harness (JSON/TOML/JSONC) — track names only, never print env/args/headers.
 
-**Desktop-agent installation distinction:** skills live under `~/.agents/skills`
-and are linked into Claude's `~/.claude/skills`; Claude hook mods are separate
+**Desktop-agent installation distinction:** skills live as real canonical
+directories under `~/.agents/skills` and are linked only into Claude's
+`~/.claude/skills`; Claude hook mods are separate
 plugin directories under `~/.agents/mods/<name>` linked into
 `~/.claude/mods/<name>`. A skill symlink does not activate a mod. A mod link
 must preserve `.claude-plugin/plugin.json` and its hook registration files,
 then Claude must be restarted. The current local mod inventory includes
-`cache-keeper`; apply the same source-and-link procedure to future mods.
+`cache-keeper`; apply the same source-and-link procedure to future mods. Never
+put a symlink or junction inside the canonical `.agents/skills` or `.agents/mods`
+directories; import external sources as real directories first.
 
 For a laptop installation or post-pull synchronization, the agent must read
 `SETUP.md`, discover harnesses, ask which supported harnesses to configure, and

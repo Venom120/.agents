@@ -59,7 +59,8 @@ python scripts/sync.py --harness claude,codex,antigravity --apply
 
 Replace the harness list with the user's answer. The sync is idempotent:
 
-- source skills are `skills/<name>/SKILL.md`;
+- source skills are real directories at `skills/<name>/SKILL.md`;
+- canonical skills and mods under `.agents` are never symlinks or junctions;
 - Claude and OpenCode receive per-skill links;
 - Codex reads the shared source directly;
 - Antigravity receives a whole-folder link;
@@ -107,7 +108,8 @@ files, but it must not commit or push unless the user separately asks.
 
 Never put secrets in this repository. External plugin checkouts should remain
 ignored unless their distributable source is intentionally added under the
-documented source directories.
+documented source directories. Copy imported skill directories into
+`.agents/skills`; do not link them there.
 
 See [README.md](README.md) for the skill/mod distinction and
 [AGENTS.md](AGENTS.md) for the full operating rules.
