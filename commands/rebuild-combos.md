@@ -1,9 +1,9 @@
 ---
 name: rebuild-combos
-description: Rebuild My-Agents OmniRoute COMBOS from the latest model and provider CSV exports.
+description: Rebuild ~/.agents OmniRoute COMBOS from the latest model and provider CSV exports.
 ---
 
-Rebuild the `COMBOS` variable in the My-Agents repository from the latest
+Rebuild the `COMBOS` variable in the ~/.agents/omniroute-setup/omniroute_free_combos.py file from the latest
 OmniRoute CSV exports.
 
 ## Required workflow

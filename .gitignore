@@ -20,3 +20,5 @@ skills/*/.git/
 .swarm
 .serena
 apps/AI-Video-Factory/
+elephant-goldfish-model/
+skills/egm-*/
