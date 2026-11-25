@@ -13,7 +13,7 @@ adding a skill, command, or mod so the laptop agent can see the current set.
 - [ ] Run `scripts/inventory.py` and inspect broken links or duplicates.
 - [ ] Restart the selected desktop agents.
 
-## Skills (246)
+## Skills (248)
 
 - [ ] `adding-guardrails` — `skills\adding-guardrails`
 - [ ] `agent-health-timeout` — `skills\agent-health-timeout`
@@ -56,6 +56,7 @@ adding a skill, command, or mod so the laptop agent can see the current set.
 - [ ] `conversation-state-db` — `skills\conversation-state-db`
 - [ ] `convert-documents-to-markdown` — `skills\convert-documents-to-markdown`
 - [ ] `core-viva` — `skills\core-viva`
+- [ ] `cost-routing` — `skills\cost-routing`
 - [ ] `cracked-profile` — `skills\cracked-profile`
 - [ ] `create-game-assets` — `skills\create-game-assets`
 - [ ] `database-query-tool` — `skills\database-query-tool`
@@ -201,6 +202,7 @@ adding a skill, command, or mod so the laptop agent can see the current set.
 - [ ] `securing-agents` — `skills\securing-agents`
 - [ ] `security-and-hardening` — `skills\security-and-hardening`
 - [ ] `semantic-cache` — `skills\semantic-cache`
+- [ ] `session-teams` — `skills\session-teams`
 - [ ] `setup-cracked` — `skills\setup-cracked`
 - [ ] `setup-matt-pocock-skills` — `skills\setup-matt-pocock-skills`
 - [ ] `shader-programming` — `skills\shader-programming`

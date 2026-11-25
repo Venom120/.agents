@@ -18,6 +18,8 @@ Repo path: `$ARGUMENTS` (empty = current working directory; do not ask for a pat
 ## Step 2 — Recommendations (derived from step 1)
 Recommend only items with a clear use in THIS repo; do not list everything installed.
 - **Skills** already available and relevant (name + path + one-line why); redundant ones; project-specific skills worth creating.
+- **Session team** (`session-teams`): only if the repo has 2+ recurring roles with separate outputs (e.g. research / build / review). Name each role, its output file, who it reports to and what it may touch; otherwise say "single session".
+- **Model routing** (`cost-routing`): map this repo's task types to `haiku` / `sonnet` / `opus`; list agent types worth a `model:` pin. The routing mod is opt-in: recommend it, never enable it.
 - **Commands** for development, testing, debugging, docs, code review, deployment, maintenance.
 - **MCP servers:** installed-and-relevant vs. would-need-install/config (e.g. GitHub for repo/PR flows, DB for projects with a database, browser for web apps, docs MCP for framework references, design MCP for design tools). Mark which need credentials; never show them.
 - **Plugins/extensions:** only where they add something not already covered.
@@ -29,7 +31,7 @@ Conflicts, shortlisted installs (which to install), ambiguities in workflow/scop
 ## Step 4 — Write (after approval)
 Update the EXISTING files in place; preserve content and formatting. Create `AGENTS.md` or other harness files only if they already exist or the user asks.
 - **First run, no playbook yet:** create CLAUDE.md with: Project snapshot (stack, layout, run/build/test/lint commands) / Hard rules (carry existing ones verbatim) / Capability map (task type -> skill/subagent/MCP -> when to avoid; mark global vs project) / Execution playbook (Understand -> Match -> Plan -> Approve -> Implement -> Verify -> Review) / Ask-don't-guess / Dangerous operations (deploy, migrations, deletes, force-push, secrets, prod access are confirmation-gated) / Learning rule.
-- **Every run:** add or replace ONLY the block between `<!-- ai-tooling:begin -->` and `<!-- ai-tooling:end -->` containing `## Available AI Tooling & Recommended Workflows` (<= 25 lines): relevant installed skills (with `~/.agents/skills/<name>` paths), recommended commands, relevant MCP servers, plugins, suggested workflows, and tools that need installation/configuration (labelled "not installed"). Concise pointers, never copied skill text. Re-running updates the block; it never duplicates entries.
+- **Every run:** add or replace ONLY the block between `<!-- ai-tooling:begin -->` and `<!-- ai-tooling:end -->` containing `## Available AI Tooling & Recommended Workflows` (<= 25 lines): relevant installed skills (with `~/.agents/skills/<name>` paths), recommended commands, relevant MCP servers, plugins, suggested workflows, the model per task type, the session team (roles and hand-offs, only if recommended in Step 2), and tools that need installation/configuration (labelled "not installed"). Concise pointers, never copied skill text. Re-running updates the block; it never duplicates entries.
 - Keep CLAUDE.md around 150 lines; link long docs instead of copying them.
 
 ## Constraints
