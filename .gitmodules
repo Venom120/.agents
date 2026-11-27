@@ -13,3 +13,6 @@
 [submodule "skills/Agent-Reach"]
 	path = skills/Agent-Reach
 	url = https://github.com/Panniantong/Agent-Reach.git
+[submodule "skills/awwwards"]
+	path = skills/awwwards
+	url = https://github.com/SandroHub013/awwwards-skill.git

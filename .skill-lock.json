@@ -1334,11 +1334,12 @@
       "source": "Nutlope/hallmark",
       "sourceType": "github",
       "sourceUrl": "https://github.com/Nutlope/hallmark.git",
+      "commit": "04977e15f3dfd6ee4b74c887dac3eb52665d6c92",
       "skillPath": "skills/hallmark/SKILL.md",
       "skillFolderHash": "ac6d58803694c4b4c31567b6e1e47dd75fce8819",
       "pluginName": "hallmark",
       "installedAt": "2026-11-15T19:02:59.470Z",
-      "updatedAt": "2026-11-15T19:02:59.470Z"
+      "updatedAt": "2026-11-25T18:32:54.208Z"
     },
     "open-code-review": {
       "source": "alibaba/open-code-review",
@@ -1359,6 +1360,66 @@
       "skillFolderHash": "9511b6fca78fb1e983cd849f6da6ff55caf670d7",
       "installedAt": "2026-11-21T19:57:41.756Z",
       "updatedAt": "2026-11-21T19:57:41.756Z"
+    },
+    "reanimate": {
+      "source": "NiazMorshed2007/reanimate",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/NiazMorshed2007/reanimate.git",
+      "commit": "3f7a55a2986a84ca2173e86ee9127eefe31d046d",
+      "skillPath": "skills/reanimate/SKILL.md",
+      "skillFolderHash": "09842cb4834bc30298af8b3f2b82da8aaa2ae501",
+      "installedAt": "2026-11-25T16:50:30.603Z",
+      "updatedAt": "2026-11-25T16:50:30.603Z"
+    },
+    "security-audit": {
+      "source": "cloudflare/security-audit-skill",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/cloudflare/security-audit-skill.git",
+      "commit": "c1c8a8c1471069fb0e188eeaff69b8e8db6564a8",
+      "skillPath": "skills/security-audit/SKILL.md",
+      "skillFolderHash": "ccbc33ed119b28c3ef7b44a7e2081ab191ad63af",
+      "installedAt": "2026-11-25T18:48:57.296Z",
+      "updatedAt": "2026-11-25T18:48:57.296Z"
+    },
+    "openmotion": {
+      "source": "nexu-io/openmotion",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/nexu-io/openmotion.git",
+      "commit": "dcd36bb43ead472e16a010295892bd94778c43dd",
+      "skillPath": "skills/openmotion/SKILL.md",
+      "skillFolderHash": "31310cf0560c84268b66f758ff8fbc1f9683b909",
+      "installedAt": "2026-11-26T14:16:27.009Z",
+      "updatedAt": "2026-11-26T14:16:27.009Z"
+    },
+    "earshot": {
+      "source": "Leonxlnx/earshot",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Leonxlnx/earshot.git",
+      "commit": "7a7f7c5c70d4a763a1eca4b3666af7c77e313f97",
+      "skillPath": "skills/earshot/SKILL.md",
+      "skillFolderHash": "592b8f48a8074121e28f6210e6ed538b85407e7f",
+      "installedAt": "2026-11-26T14:16:37.576Z",
+      "updatedAt": "2026-11-26T14:16:37.576Z"
+    },
+    "real-sound": {
+      "source": "Leonxlnx/earshot",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Leonxlnx/earshot.git",
+      "commit": "7a7f7c5c70d4a763a1eca4b3666af7c77e313f97",
+      "skillPath": "skills/real-sound/SKILL.md",
+      "skillFolderHash": "1e9da216572e938d8766ff1d81f9b8c4faaaca43",
+      "installedAt": "2026-11-26T14:16:37.579Z",
+      "updatedAt": "2026-11-26T14:16:37.579Z"
+    },
+    "be-ambitious": {
+      "source": "robonuggets/be-ambitious",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/robonuggets/be-ambitious.git",
+      "commit": "dc116a3ebd8cf772e4d0930626f67369bd60399d",
+      "skillPath": "SKILL.md",
+      "skillFolderHash": "dc116a3ebd8cf772e4d0930626f67369bd60399d",
+      "installedAt": "2026-11-27T15:27:54.650Z",
+      "updatedAt": "2026-11-27T15:27:54.650Z"
     }
   },
   "dismissed": {

@@ -13,7 +13,7 @@ adding a skill, command, or mod so the laptop agent can see the current set.
 - [ ] Run `scripts/inventory.py` and inspect broken links or duplicates.
 - [ ] Restart the selected desktop agents.
 
-## Skills (248)
+## Skills (255)
 
 - [ ] `adding-guardrails` — `skills\adding-guardrails`
 - [ ] `agent-health-timeout` — `skills\agent-health-timeout`
@@ -30,6 +30,7 @@ adding a skill, command, or mod so the laptop agent can see the current set.
 - [ ] `astryx` — `skills\astryx`
 - [ ] `async-agent-background` — `skills\async-agent-background`
 - [ ] `audio-design` — `skills\audio-design`
+- [ ] `awwwards` — `skills\awwwards`
 - [ ] `be-ambitious` — `skills\be-ambitious`
 - [ ] `bevy-ecs` — `skills\bevy-ecs`
 - [ ] `brandkit` — `skills\brandkit`
@@ -71,6 +72,7 @@ adding a skill, command, or mod so the laptop agent can see the current set.
 - [ ] `document-loaders` — `skills\document-loaders`
 - [ ] `document-reranking` — `skills\document-reranking`
 - [ ] `documentation-and-adrs` — `skills\documentation-and-adrs`
+- [ ] `earshot` — `skills\earshot`
 - [ ] `ebitengine-game` — `skills\ebitengine-game`
 - [ ] `egm-bootstrap` — `skills\egm-bootstrap`
 - [ ] `egm-brainstorm` — `skills\egm-brainstorm`
@@ -166,6 +168,7 @@ adding a skill, command, or mod so the laptop agent can see the current set.
 - [ ] `offer-decode` — `skills\offer-decode`
 - [ ] `open-code-review` — `skills\open-code-review`
 - [ ] `open-code-review-delegate` — `skills\open-code-review-delegate`
+- [ ] `openmotion` — `skills\openmotion`
 - [ ] `output-guardrails` — `skills\output-guardrails`
 - [ ] `pattern-coach` — `skills\pattern-coach`
 - [ ] `performance-optimization` — `skills\performance-optimization`
@@ -181,6 +184,8 @@ adding a skill, command, or mod so the laptop agent can see the current set.
 - [ ] `pygame-core` — `skills\pygame-core`
 - [ ] `rag-pipeline` — `skills\rag-pipeline`
 - [ ] `react-agent-loop` — `skills\react-agent-loop`
+- [ ] `real-sound` — `skills\real-sound`
+- [ ] `reanimate` — `skills\reanimate`
 - [ ] `referral-dm` — `skills\referral-dm`
 - [ ] `rejection-review` — `skills\rejection-review`
 - [ ] `response-validation-retry` — `skills\response-validation-retry`
@@ -198,9 +203,11 @@ adding a skill, command, or mod so the laptop agent can see the current set.
 - [ ] `roguelike` — `skills\roguelike`
 - [ ] `router` — `skills\router`
 - [ ] `rpg` — `skills\rpg`
+- [ ] `ruflo` — `skills\ruflo`
 - [ ] `save-systems` — `skills\save-systems`
 - [ ] `securing-agents` — `skills\securing-agents`
 - [ ] `security-and-hardening` — `skills\security-and-hardening`
+- [ ] `security-audit` — `skills\security-audit`
 - [ ] `semantic-cache` — `skills\semantic-cache`
 - [ ] `session-teams` — `skills\session-teams`
 - [ ] `setup-cracked` — `skills\setup-cracked`
