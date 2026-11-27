@@ -23,6 +23,7 @@ Recommend only items with a clear use in THIS repo; do not list everything insta
 - **Commands** for development, testing, debugging, docs, code review, deployment, maintenance.
 - **MCP servers:** installed-and-relevant vs. would-need-install/config (e.g. GitHub for repo/PR flows, DB for projects with a database, browser for web apps, docs MCP for framework references, design MCP for design tools). Mark which need credentials; never show them.
 - **Plugins/extensions:** only where they add something not already covered.
+- **Skill pipeline:** the draft prompt → skills map for this repo (see Step 4), including newly installed skills since the pipeline was last written. Skills that open a browser UI and wait, cost money or send data outside are listed as "ask first".
 - **Missing tooling** and overlaps/conflicts (global vs project): options, your recommendation, what changes for each choice.
 
 ## Step 3 — STOP and ask (one message)
@@ -31,11 +32,18 @@ Conflicts, shortlisted installs (which to install), ambiguities in workflow/scop
 ## Step 4 — Write (after approval)
 Update the EXISTING files in place; preserve content and formatting. Create `AGENTS.md` or other harness files only if they already exist or the user asks.
 - **First run, no playbook yet:** create CLAUDE.md with: Project snapshot (stack, layout, run/build/test/lint commands) / Hard rules (carry existing ones verbatim) / Capability map (task type -> skill/subagent/MCP -> when to avoid; mark global vs project) / Execution playbook (Understand -> Match -> Plan -> Approve -> Implement -> Verify -> Review) / Ask-don't-guess / Dangerous operations (deploy, migrations, deletes, force-push, secrets, prod access are confirmation-gated) / Learning rule.
-- **Every run:** add or replace ONLY the block between `<!-- ai-tooling:begin -->` and `<!-- ai-tooling:end -->` containing `## Available AI Tooling & Recommended Workflows` (<= 25 lines): relevant installed skills (with `~/.agents/skills/<name>` paths), recommended commands, relevant MCP servers, plugins, suggested workflows, the model per task type, the session team (roles and hand-offs, only if recommended in Step 2), and tools that need installation/configuration (labelled "not installed"). Concise pointers, never copied skill text. Re-running updates the block; it never duplicates entries.
+- **Every run:** add or replace ONLY the block between `<!-- ai-tooling:begin -->` and `<!-- ai-tooling:end -->` containing `## Available AI Tooling & Recommended Workflows` (under 50 lines, markers included): relevant installed skills (with `~/.agents/skills/<name>` paths), recommended commands, relevant MCP servers, plugins, suggested workflows, the model per task type, the session team (roles and hand-offs, only if recommended in Step 2), and tools that need installation/configuration (labelled "not installed"). Concise pointers, never copied skill text. Re-running updates the block; it never duplicates entries. The block states that matching skills are invoked without being asked, and links the pipeline file.
+- **Every run:** create or update the skill pipeline in `.claude/rules/skill-pipeline.md` (in place; keep the user's own rows and choices; use the repo's equivalent if it has one). Contents, in under 60 lines:
+  1. **Auto-invoke:** read each prompt, invoke every matching skill (and any installed one that matches but is unlisted), name them in the report; skills never override approvals, test cadence or git rules.
+  2. **Change size:** ask surgical / broader / ambitious for every code change unless the prompt says; smallest-diff skills only for surgical.
+  3. **Planning pipeline**, ALWAYS when `PLAN.md` / `TODO.md` is drafted or revised: understand → size and open questions → design (user-typed commands) → `be-ambitious` ideas as optional items → spec if unclear → domain skills → write the plan with a `Skills:` line and test plan per phase → offer a plan-review UI (e.g. `plannotator-annotate`, opened only on a yes) → wait for approval.
+  4. **Prompt → skills table:** one row per task type this repo really has, skills in invocation order, only names the inventory shows.
+  5. **Limits:** ask first (external service, sign-in, upload, spend, download, install, waiting UI); banned tools; owner-typed skills (every `disable-model-invocation` skill and any the user reserves); no agents, full test gates or commits just because a skill says so.
+  Apply the same ask-before-writing rule as the block, and ask about any choice the user has not made before.
 - Keep CLAUDE.md around 150 lines; link long docs instead of copying them.
 
 ## Constraints
-No installs, no edits outside the instruction files, no destructive commands without approval. Reference only names/paths that exist (verify with the inventory). Don't commit or push.
+No installs, no edits outside the instruction files (the skill pipeline file is one), no destructive commands without approval. Reference only names/paths that exist (verify with the inventory). Don't commit or push.
 
 ## Final output (always)
-1 Project analysis. 2 Detected stack. 3 Relevant existing skills. 4 Recommended commands. 5 Recommended MCP servers. 6 Recommended plugins. 7 Missing tooling. 8 Instruction files updated (and which decisions came from the user). 9 Recommendations that need approval.
+1 Project analysis. 2 Detected stack. 3 Relevant existing skills. 4 Recommended commands. 5 Recommended MCP servers. 6 Recommended plugins. 7 Missing tooling. 8 Instruction files updated, the skill pipeline included (and which decisions came from the user). 9 Recommendations that need approval.

@@ -14,16 +14,18 @@ equivalents, keep the discipline.
 > **TOP RULE — ASK, DON'T ASSUME.** Never act on your own for anything new, out of scope or not explicitly asked (extra tests, scripts,
 > refactors, "smoke tests", tangents). Present the plan, get explicit approval, then act. If behaviour is not established by code,
 > docs or this file: inspect, state the ambiguity, ask ONE focused question with minimal options, wait.
-1. **Smallest correct change.** No scope creep, no unrequested abstractions, no speculative config. Reading and verification are never skipped.
+1. **Change size is chosen per task, never assumed.** For every task that changes code, ask **surgical** (smallest correct diff), **broader** (fix the surrounding area too) or **ambitious** (redesign toward the goal), unless the request already says; recommend one. Add nothing outside the chosen size. Smallest-diff skills (`ponytail`, surgical-edit guidance) apply only to surgical. Reading, approvals and verification are never skipped.
 2. **Approval gates:** schema/model/architecture changes, new dependencies, app-shell/routing changes, large refactors, doc edits (one "update
    docs" approval covers every affected doc), installs of skills/plugins/MCP, anything destructive (§13).
 3. **Never revert** the user's (or a prior session's) changes without asking; explain the impact of reverting versus keeping.
 4. **Report honestly:** what changed, what was verified, what failed (with output), what was skipped, remaining risks. Do not claim "done" without a real check.
 5. **Learn:** when corrected, or when you hit a major convention/gotcha, propose adding it here (edit in place; push detail into docs).
+6. **Use skills without being asked.** At the start of every task, and when its phase changes, invoke every installed skill that matches (start from the project's `skill-pipeline.md`; if none fits, search and ask before installing). Name the skills used in the report. Skills never override approval gates, test cadence or git rules. Ask before a skill connects a service, signs in, uploads, spends, downloads or installs; run owner-typed skills only when the user types them.
+7. **Progress questions:** when asked whether something is done, check the real process and its output (not memory), take repeated readings if asked, and answer briefly in plain language.
 
 ## 2. Workflow (every non-trivial task)
 1. **Understand** — read this file, the folder README, the matching guide, then the code. Trace the whole flow before editing.
-2. **Match** — pick skills/agents/MCPs from §4. If none fits, search for a skill and **ask before installing**.
+2. **Match** — invoke the matching skills from the project's skill pipeline, then pick agents/MCPs from §4. If none fits, search for a skill and **ask before installing**.
 3. **Plan** — steps, files, risks, verification. Independent steps → parallel subagents, **one folder/area per subagent**; research before implement; never send an implementer in cold.
 4. **Approve** — present the plan; wait for the go-ahead on anything major or ambiguous.
 5. **Implement** — compile/typecheck each file after editing; follow the surrounding code's idiom, naming and comment density.
@@ -38,6 +40,10 @@ equivalents, keep the discipline.
 - State the defaults you chose ("veto any"), the risks (each pauses its phase and returns to the user), and a verification matrix.
 - Ambiguity or a caveat found mid-implementation pauses the phase and goes back to the questionnaire; log it in TODO.md.
 
+### Planning pipeline — ALWAYS when `PLAN.md` / `TODO.md` is drafted or revised
+Run in order; skip a step only when its condition is not met, and say so in the plan.
+1. **Understand** the code and docs. 2. **Ask** the change size and every open question. 3. **Design** large or multi-phase work first (the user types the `/egm-*` commands). 4. **Ambition lens** for new features: `be-ambitious`; its ideas go into the questions as optional items, nothing enters the plan without a yes. 5. **Requirements:** `spec-driven-development` when the need is unclear. 6. **Domain skills:** invoke every one the work touches. 7. **Write** with `planning-and-task-breakdown`; each phase lists its `Skills:` and a test plan. 8. **Approve:** offer to open the plan in Plannotator (`plannotator-annotate`; open it only on a yes), then wait. Offer `plannotator-review` the same way before a commit.
+
 ## 4. Capability routing
 The skills/commands/MCP servers you actually have live in `~/.agents` (see §14); `/init-playbook` writes this project's real map between
 `<!-- ai-tooling:begin -->` and `<!-- ai-tooling:end -->`. Generic routing:
@@ -48,7 +54,7 @@ The skills/commands/MCP servers you actually have live in `~/.agents` (see §14)
 | Library/framework docs | a docs MCP | business-logic questions |
 | Architecture, schema, API shape | architect agent + DB-change checklist | trivial edits |
 | Backend / frontend code | implementer agent + the project's feature skill, **after the plan is approved** | unapproved or unresearched areas |
-| UI check on localhost | browser/Playwright MCP against the local gateway | production URLs |
+| UI check on localhost | `agent-browser` CLI (own session) against the local gateway; **never Playwright** | production URLs |
 | Tests | test-engineer **writes**, the parent **runs** | a subagent running suites |
 | Review before commit | code-review skill/agent | before code exists |
 | Debug | debugging skill; read logs first | guessing without evidence |
@@ -79,7 +85,7 @@ Flow: **routers → services → repositories → models.**
 
 ## 7. Testing and verification
 - Run suites in the same environment as production-like runtime (the container). **Before any run, confirm the container holds the edited code** (bind-mount: compare file hashes host vs container; rebuild if different). A hot-reloading container must not see edits during seed/validate runs; wait for `healthy`.
-- **Cadence:** targeted tests while iterating; the FULL suite once after the last change of a batch/phase, plus the end-to-end lifecycle validator. Run long commands in the background; investigate an outlier duration instead of re-running; docs-only/lint-only changes skip re-gating. Per-test timeout (120 s).
+- **Cadence:** targeted tests while iterating. The FULL suite and the end-to-end lifecycle validator are heavy: run them ONLY with the user's approval in the current conversation, once after the last change of a batch/phase, as separate commands (never chained), never killed mid-run, and never re-run once they passed. Run long commands in the background; investigate an outlier duration instead of re-running; docs-only/lint-only changes skip re-gating. Per-test timeout (120 s).
 - **Output convention:** the runner prints ONE letter per test/check live (P/F/S/E) and writes the full verbose output to a git-ignored log. Wait for the end, read the log only for F/E, never re-run just to see a failure. Keep a "known failures" list.
 - **Route coverage gate:** a lifecycle validator calls every public route (reviewed allowlist for exceptions), creates top-down, exercises features, deletes bottom-up and checks for residue. A new/changed route needs a call there; permission/DTO changes keep it 100% green.
 - Frontend: lint + typecheck + production build; then a browser click-through on localhost for UI changes. Say plainly what was NOT verified (browser, prod-like data, migrations).
@@ -105,7 +111,7 @@ Performance is a requirement: assess it for every feature and implement what is 
 - **Two layers.** UI (renders, owns no I/O): `components/ui` atoms, shared widgets, pages that compose them. Frontend-backend layer (everything that talks to the server, waits, caches, guards): `api/` (the ONLY server calls), `hooks/`, `contexts/`, `utils/`. Keep them apart.
 - **API files:** named `async function`, one per endpoint, `// VERB /path` comment, `return response.data`, no try/catch, no toast (one axios interceptor shows errors). **DTO types mirror backend DTOs exactly** (snake_case, header comment naming the source).
 - **Page contract:** state that a user would refresh/share lives in the **URL** (page, search, every filter, tab) via one hook; server-paged lists via one paged-list hook (cache key = every filter except page/search); search debounced into the URL; mutations: `await api` → toast → patch/refetch; empty `catch` with a comment; effects that await guard with a `cancelled` flag and clean up timers/listeners.
-- **Screen anatomy:** header (icon tile + title + subtitle + primary action) → optional stat row → filter card (search, selects, "Clear" only when active) → data table + pagination → modals. Mutations happen in a **modal**, never inline. Permission-gated controls are **not rendered** (never "disabled with a tooltip").
+- **Screen anatomy:** header (icon tile + title + subtitle + primary action) → optional stat row → filter card (search, selects, "Clear" only when active) → data table + pagination → modals. Mutations happen in a **modal**, never inline. Without the permission, a page, tab, button or **sidebar/menu entry is not rendered** (never "disabled with a tooltip"), by the same rule the server enforces.
 - **States:** first load = skeleton shaped like the content; empty = muted icon + one sentence; error = toast only; validation = toast before the call; busy buttons disabled until the promise settles; crash = error boundary.
 - **Design system:** tokens as CSS variables (light + dark), never hard-coded hex; one icon library; one motion library (reduced-motion safe); one font stack; consistent radius/spacing scale; domain colours (levels, statuses) only from one util. Every table header sortable (URL-backed, server allow-listed columns). Mobile-first, keyboard-accessible, `aria-label` on icon-only buttons. New screens copy the closest existing page; record conventions in a `FRONTEND.md`.
 - **Hierarchies** are parent-first selects; a child is disabled until its parent is chosen and cleared when the parent changes. Display strings never hard-code a domain word that differs between segments; read it from a label helper.

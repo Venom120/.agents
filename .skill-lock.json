@@ -1420,6 +1420,46 @@
       "skillFolderHash": "dc116a3ebd8cf772e4d0930626f67369bd60399d",
       "installedAt": "2026-11-27T15:27:54.650Z",
       "updatedAt": "2026-11-27T15:27:54.650Z"
+    },
+    "sqlmodel": {
+      "source": "fastapi/sqlmodel",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/fastapi/sqlmodel.git",
+      "commit": "8debceb2d5bf1574b92c0d86199767d5efe7028c",
+      "skillPath": "sqlmodel/.agents/skills/sqlmodel/SKILL.md",
+      "skillFolderHash": "f1fa4940b907582578301a6c5e95fcbf1df32d66",
+      "installedAt": "2026-11-27T15:59:01.999Z",
+      "updatedAt": "2026-11-27T15:59:01.999Z"
+    },
+    "plannotator-compound": {
+      "source": "backnotprop/plannotator",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/backnotprop/plannotator.git",
+      "commit": "1e53a0d841f56483b8bb36faa3234615ada061ae",
+      "skillPath": "apps/skills/extra/plannotator-compound/SKILL.md",
+      "skillFolderHash": "73dcebd303714bcc3fbdffae162068435eb49d97",
+      "installedAt": "2026-11-27T17:07:12.454Z",
+      "updatedAt": "2026-11-27T17:07:12.454Z"
+    },
+    "plannotator-setup-goal": {
+      "source": "backnotprop/plannotator",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/backnotprop/plannotator.git",
+      "commit": "1e53a0d841f56483b8bb36faa3234615ada061ae",
+      "skillPath": "apps/skills/extra/plannotator-setup-goal/SKILL.md",
+      "skillFolderHash": "29d5d60c2b8a88c1786d7bbdbbfa37e44b64f6a5",
+      "installedAt": "2026-11-27T17:07:12.464Z",
+      "updatedAt": "2026-11-27T17:07:12.464Z"
+    },
+    "plannotator-visual-explainer": {
+      "source": "backnotprop/plannotator",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/backnotprop/plannotator.git",
+      "commit": "1e53a0d841f56483b8bb36faa3234615ada061ae",
+      "skillPath": "apps/skills/extra/plannotator-visual-explainer/SKILL.md",
+      "skillFolderHash": "48b1d39f317db181b75c8c4dafba6b78bb8f17a4",
+      "installedAt": "2026-11-27T17:07:12.469Z",
+      "updatedAt": "2026-11-27T17:07:12.469Z"
     }
   },
   "dismissed": {

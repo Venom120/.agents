@@ -13,7 +13,7 @@ adding a skill, command, or mod so the laptop agent can see the current set.
 - [ ] Run `scripts/inventory.py` and inspect broken links or duplicates.
 - [ ] Restart the selected desktop agents.
 
-## Skills (255)
+## Skills (265)
 
 - [ ] `adding-guardrails` — `skills\adding-guardrails`
 - [ ] `agent-health-timeout` — `skills\agent-health-timeout`
@@ -175,6 +175,14 @@ adding a skill, command, or mod so the laptop agent can see the current set.
 - [ ] `physics-tuning` — `skills\physics-tuning`
 - [ ] `plan-and-execute-agent` — `skills\plan-and-execute-agent`
 - [ ] `planning-and-task-breakdown` — `skills\planning-and-task-breakdown`
+- [ ] `plannotator` — `skills\plannotator`
+- [ ] `plannotator-annotate` — `skills\plannotator-annotate`
+- [ ] `plannotator-compound` — `skills\plannotator-compound`
+- [ ] `plannotator-inbox` — `skills\plannotator-inbox`
+- [ ] `plannotator-last` — `skills\plannotator-last`
+- [ ] `plannotator-review` — `skills\plannotator-review`
+- [ ] `plannotator-setup-goal` — `skills\plannotator-setup-goal`
+- [ ] `plannotator-visual-explainer` — `skills\plannotator-visual-explainer`
 - [ ] `platformer` — `skills\platformer`
 - [ ] `prep-plan` — `skills\prep-plan`
 - [ ] `procedural-gen` — `skills\procedural-gen`
@@ -217,6 +225,7 @@ adding a skill, command, or mod so the laptop agent can see the current set.
 - [ ] `skill-cleanup` — `skills\skill-cleanup`
 - [ ] `source-driven-development` — `skills\source-driven-development`
 - [ ] `spec-driven-development` — `skills\spec-driven-development`
+- [ ] `sqlmodel` — `skills\sqlmodel`
 - [ ] `stitch-design-taste` — `skills\stitch-design-taste`
 - [ ] `stop-slop` — `skills\stop-slop`
 - [ ] `streaming-response-handler` — `skills\streaming-response-handler`
@@ -255,6 +264,7 @@ adding a skill, command, or mod so the laptop agent can see the current set.
 - [ ] `web-design-guidelines` — `skills\web-design-guidelines`
 - [ ] `web-search-tool` — `skills\web-search-tool`
 - [ ] `webapp-testing` — `skills\webapp-testing`
+- [ ] `what-if-animation` — `skills\what-if-animation`
 - [ ] `writing-beats` — `skills\writing-beats`
 - [ ] `writing-for-agents` — `skills\writing-for-agents`
 - [ ] `writing-fragments` — `skills\writing-fragments`

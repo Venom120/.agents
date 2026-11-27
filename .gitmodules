@@ -16,3 +16,6 @@
 [submodule "skills/awwwards"]
 	path = skills/awwwards
 	url = https://github.com/SandroHub013/awwwards-skill.git
+[submodule "skills/what-if-animation"]
+	path = skills/what-if-animation
+	url = https://github.com/kelano86/what-if-animation.git
